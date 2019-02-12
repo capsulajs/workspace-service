@@ -1,0 +1,16 @@
+{
+  "name": "workspace-service",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/capsulajs/workspace-service.git",
+  "author": "stephane Benayoun <stephane.benayoun@jivygroup.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
+    "tslint-config-prettier": "^1.18.0"
+  }
+}
