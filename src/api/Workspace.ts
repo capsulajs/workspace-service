@@ -8,7 +8,7 @@ interface Workspace {
   service(serviceRequest: ServiceRequest): Promise<ServiceResponse>;
 
   // Register a service or a component in the workspace
-  // Can be used by any service to register itself and become available with Worspace.service method
+  // Can be used by any service to register itself and become available with Workspace.service method
   register(registerRequest: RegisterRequest): Promise<void>;
 
   /*

@@ -7,5 +7,5 @@ interface ServiceConfig {
   name: string;
   displayName: string;
   url: string;
-  options: { [key: string]: any }[]
+  options: Array<{ [key: string]: any }>
 }

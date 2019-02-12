@@ -5,6 +5,9 @@
   "repository": "https://github.com/capsulajs/workspace-service.git",
   "author": "stephane Benayoun <stephane.benayoun@jivygroup.com>",
   "license": "MIT",
+  "scripts": {
+    "lint": "tslint 'src/**/*.ts'"
+  },
   "private": false,
   "devDependencies": {
     "tslint": "^5.12.1",
