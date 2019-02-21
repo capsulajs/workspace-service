@@ -3,5 +3,7 @@ export interface ServiceRequest {
 }
 
 export interface ServiceResponse {
-  proxy: any; // TODO
+  serviceName: string;
+  displayName: string;
+  proxy: any;
 }
