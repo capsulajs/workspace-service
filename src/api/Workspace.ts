@@ -1,7 +1,11 @@
+import { StartRequest } from './methods/start';
+import { ServiceRequest, ServiceResponse } from './methods/service';
+import { RegisterRequest } from './methods/register';
+
 interface Workspace {
   // Load all the services from url
   // Load the layout and render components inside
-  start(startRequest: StartRequest) : Promise<void>;
+  start(startRequest: StartRequest): Promise<void>;
 
   // Returns proxy of a registered service
   // Can be used by any service during run time to get a proxy of another service
@@ -17,21 +21,4 @@ interface Workspace {
   persist({ serviceName: string }): Promise<>;
   state({ serviceName: string }): Observable<ServiceState>;
   */
-}
-
-interface StartRequest {
-  token: string;
-}
-
-interface Service {
-  name: string;
-  displayName: string;
-}
-
-interface ServiceRequest extends Service {}
-
-interface RegisterRequest extends Service {}
-
-interface ServiceResponse extends Service {
-  proxy: any // TODO
 }
