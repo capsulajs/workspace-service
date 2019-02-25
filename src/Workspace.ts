@@ -6,7 +6,7 @@ import { RegisterRequest } from './api/methods/register';
 interface RegisteredService {
   serviceName: string;
   displayName: string;
-  meta: any; // Definition
+  definition: any; // Definition
   registered: boolean;
 }
 
@@ -28,7 +28,8 @@ class Workspace implements WorkspaceInterface {
           displayName: 'The first service',
           url: '',
           options: {
-            getInstance: (module: any) => new module.default(this.token), // The module constructor need to access register and services methods from WS. From SC ?
+            getInstance: (module: any) => new module.default(this.token),
+            definition: {},
           },
         },
         {
@@ -63,7 +64,7 @@ class Workspace implements WorkspaceInterface {
               this.serviceRegistry[service.name] = {
                 serviceName: service.name,
                 displayName: service.displayName,
-                meta: instance.meta,
+                definition: service.options.definition || instance.definition,
                 registered: false,
               };
             })
@@ -86,7 +87,7 @@ class Workspace implements WorkspaceInterface {
         // Get proxy from scalecube and resolve
         const proxy = scalecube
           .proxy()
-          .api(service.meta)
+          .api(service.definition)
           .create();
         resolve({
           serviceName: service.serviceName,
