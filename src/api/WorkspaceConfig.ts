@@ -4,8 +4,8 @@ interface WorkspaceConfig {
 }
 
 interface ServiceConfig {
-  name: string;
+  serviceName: string;
   displayName: string;
-  url: string;
+  path: string;
   options: { [key: string]: any };
 }

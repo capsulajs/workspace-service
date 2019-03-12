@@ -1,3 +1,3 @@
 export interface StartRequest {
-  token: string;
+  // token: string; Why it was there ?
 }

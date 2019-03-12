@@ -9,5 +9,6 @@ module.exports = {
   testEnvironment: 'node',
   globals: {
     window: {},
+    document: {},
   },
 };

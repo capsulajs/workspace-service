@@ -3,7 +3,7 @@ import { ServiceRequest, ServiceResponse } from './methods/service';
 import { RegisterRequest } from './methods/register';
 
 export interface Workspace {
-  // Load all the services from url
+  // Load all the services from path
   // Load the layout and render components inside
   start(startRequest: StartRequest): Promise<void>;
 

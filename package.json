@@ -11,10 +11,10 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
     }
   },
   "dependencies": {
+    "@scalecube/scalecube-services": "0.0.14-alpha.6",
     "rxjs": "^6.4.0"
   },
   "devDependencies": {

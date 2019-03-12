@@ -2,44 +2,30 @@ import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { StartRequest } from './api/methods/start';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
+import { scalecube } from './scalecube';
 
 interface RegisteredService {
   serviceName: string;
   displayName: string;
-  definition: any; // Definition
-  registered: boolean;
+  definition: any;
 }
 
-class Workspace implements WorkspaceInterface {
+export class Workspace implements WorkspaceInterface {
   private readonly token: string;
   private serviceRegistry: { [serviceName: string]: RegisteredService };
   private config: any;
   private started: boolean;
+  private internalSc: any;
 
-  constructor(token: string) {
-    this.token = token;
+  constructor(args: { token: string; config: WorkspaceConfig }) {
+    this.token = args.token;
+    this.config = args.config;
     this.serviceRegistry = {};
     this.started = false;
-    this.config = {
-      name: 'POC',
-      services: [
-        {
-          name: 'Service1',
-          displayName: 'The first service',
-          url: '',
-          options: {
-            getInstance: (module: any) => new module.default(this.token),
-            definition: {},
-          },
-        },
-        {
-          name: 'Service2',
-          displayName: 'The second service',
-          url: '',
-          options: {},
-        },
-      ],
-    };
+  }
+
+  public getToken() {
+    return this.token;
   }
 
   public start(startRequest: StartRequest): Promise<void> {
@@ -49,70 +35,63 @@ class Workspace implements WorkspaceInterface {
       } else {
         const scalecubeBuilder = scalecube.builder();
 
-        this.config.services.forEach((service: ServiceConfig) => {
-          import(service.url)
-            .then((serviceModule) => {
-              // Get instance of the service
-              const instance = service.options.getInstance
-                ? service.options.getInstance(serviceModule)
-                : new serviceModule.default();
+        const imports = this.config.services.map(async (service: ServiceConfig) => {
+          const { serviceName, displayName, path, options, getInstance } = service;
 
-              // Add the instance to scalecube
-              scalecubeBuilder.services(instance);
+          // Get the service instance
+          const instance = await getInstance(path, this.token);
 
-              // Add the service to the internal registry
-              this.serviceRegistry[service.name] = {
-                serviceName: service.name,
-                displayName: service.displayName,
-                definition: service.options.definition || instance.definition,
-                registered: false,
-              };
-            })
-            .catch((e) => reject(e));
+          // Add the instance to scalecube
+          scalecubeBuilder.services(instance);
+
+          // Add the service to the internal registry (TODO should be done by the service itself, not the workspace)
+          return this.register({
+            serviceName,
+            displayName,
+            definition: options.definition,
+          });
         });
 
-        scalecubeBuilder.build();
-        this.started = true;
-        resolve();
+        Promise.all(imports)
+          .then(() => {
+            this.internalSc = scalecubeBuilder.build();
+            this.started = true;
+            resolve();
+          })
+          .catch((e) => reject(e));
       }
     });
   }
 
   public service(serviceRequest: ServiceRequest): Promise<ServiceResponse> {
     return new Promise((resolve, reject) => {
-      const service = this.serviceRegistry[serviceRequest.serviceName];
-      if (!service || !service.registered) {
-        reject('Service not found');
-      } else {
-        // Get proxy from scalecube and resolve
-        const proxy = scalecube
-          .proxy()
-          .api(service.definition)
-          .create();
-        resolve({
-          serviceName: service.serviceName,
-          displayName: service.displayName,
-          proxy,
-        });
+      if (!this.started) {
+        return reject('Workspace not started yet');
       }
+
+      const service = this.serviceRegistry[serviceRequest.serviceName];
+
+      return !service
+        ? reject('Service not found')
+        : resolve({
+            serviceName: service.serviceName,
+            displayName: service.displayName,
+            proxy: this.internalSc
+              .proxy()
+              .api({ definition: service.definition })
+              .create(),
+          });
     });
   }
 
   public register(registerRequest: RegisterRequest): Promise<void> {
     return new Promise((resolve, reject) => {
-      const { displayName, serviceName } = registerRequest;
       const service = this.serviceRegistry[registerRequest.serviceName];
 
-      if (!service) {
-        reject('Service not found');
-      } else if (service.registered) {
+      if (!!service) {
         reject('Service already registered');
       } else {
-        this.serviceRegistry[serviceName] = {
-          ...service,
-          displayName,
-          registered: true,
-        };
+        this.serviceRegistry[registerRequest.serviceName] = { ...registerRequest };
         resolve();
       }
     });
