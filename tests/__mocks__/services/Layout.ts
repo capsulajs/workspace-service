@@ -27,7 +27,7 @@ class Layout {
           name: 'Catalog',
           flow: async () => {
             const methodSelector = await workspace.service('MethodSelector');
-            return methodSelector.output();
+            return methodSelector.output(); // TODO return observable of props
           },
           nodeSelector: '#grid #catalog',
         },
@@ -35,7 +35,7 @@ class Layout {
           name: 'Logs',
           flow: async () => {
             const invoker = await workspace.service('Invoker');
-            return invoker.logs();
+            return invoker.logs(); // TODO return observable of props
           },
           nodeSelector: '#grid #logs',
         },
