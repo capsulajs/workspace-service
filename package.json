@@ -10,11 +10,10 @@
     "lint": "tslint -p tsconfig.json"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "dependencies": {
-    "@scalecube/scalecube-services": "0.0.14-alpha.6",
+    "@scalecube/scalecube-microservice": "next",
     "rxjs": "^6.4.0"
   },
   "devDependencies": {

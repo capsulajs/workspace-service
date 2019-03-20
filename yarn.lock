@@ -117,11 +117,18 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@scalecube/scalecube-services@0.0.14-alpha.6":
-  version "0.0.14-alpha.6"
-  resolved "https://registry.yarnpkg.com/@scalecube/scalecube-services/-/scalecube-services-0.0.14-alpha.6.tgz#ad12d5b034c4e5166f3220f4850e18f6d7af9b5b"
+"@scalecube/scalecube-discovery@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@scalecube/scalecube-discovery/-/scalecube-discovery-0.1.0.tgz#c170162b161380dff2dd84f212757ea71e723b2c"
   dependencies:
-    rxjs "^5.5.5"
+    rxjs "^6.4.0"
+
+"@scalecube/scalecube-microservice@next":
+  version "0.1.3-alpha.1"
+  resolved "https://registry.yarnpkg.com/@scalecube/scalecube-microservice/-/scalecube-microservice-0.1.3-alpha.1.tgz#188c13e41ef40376751d07c719204281b6248ef4"
+  dependencies:
+    "@scalecube/scalecube-discovery" "0.1.0"
+    rxjs "^6.4.0"
 
 "@types/jest-diff@*":
   version "20.0.1"
@@ -2716,12 +2723,6 @@ run-node@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/run-node/-/run-node-1.0.0.tgz#46b50b946a2aa2d4947ae1d886e9856fd9cabe5e"
 
-rxjs@^5.5.5:
-  version "5.5.12"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.12.tgz#6fa61b8a77c3d793dbaf270bee2f43f652d741cc"
-  dependencies:
-    symbol-observable "1.0.1"
-
 rxjs@^6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.4.0.tgz#f3bb0fe7bda7fb69deac0c16f17b50b0b8790504"
@@ -3014,10 +3015,6 @@ supports-color@^6.0.0, supports-color@^6.1.0:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-6.1.0.tgz#0764abc69c63d5ac842dd4867e8d025e880df8f3"
   dependencies:
     has-flag "^3.0.0"
-
-symbol-observable@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.1.tgz#8340fc4702c3122df5d22288f88283f513d3fdd4"
 
 symbol-tree@^3.2.2:
   version "3.2.2"

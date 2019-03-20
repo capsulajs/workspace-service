@@ -2,7 +2,8 @@ import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { StartRequest } from './api/methods/start';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
-import { scalecube } from './scalecube';
+import { Microservices } from '@scalecube/scalecube-microservice';
+import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
 
 interface RegisteredService {
   serviceName: string;
@@ -15,17 +16,13 @@ export class Workspace implements WorkspaceInterface {
   private serviceRegistry: { [serviceName: string]: RegisteredService };
   private config: any;
   private started: boolean;
-  private internalSc: any;
+  private microservice: any;
 
-  constructor(args: { token: string; config: WorkspaceConfig }) {
+  constructor(args: { token: string; config: any }) {
     this.token = args.token;
     this.config = args.config;
     this.serviceRegistry = {};
     this.started = false;
-  }
-
-  public getToken() {
-    return this.token;
   }
 
   public start(startRequest: StartRequest): Promise<void> {
@@ -33,32 +30,44 @@ export class Workspace implements WorkspaceInterface {
       if (this.started) {
         reject('Already started');
       } else {
-        const scalecubeBuilder = scalecube.builder();
 
-        const imports = this.config.services.map(async (service: ServiceConfig) => {
+        // TODO Go over each service of this.config.services :
+        // - Use service.getInstance to create instance of it
+        // - Register the service in the workspace
+
+        // When all services are instantiated and registered :
+        // - Create scalecube microservice with all instances
+
+        const services = this.config.services.map(async (service: any) => {
           const { serviceName, displayName, path, options, getInstance } = service;
+          return new Promise(async (res, rej) => {
+            // TODO add error path
+            const instance = await getInstance(path, this.token);
 
-          // Get the service instance
-          const instance = await getInstance(path, this.token);
+            // Add the service to the internal registry (TODO should be done by the service itself, not the workspace)
+            await this.register({
+              serviceName,
+              displayName,
+              definition: options.definition,
+            });
 
-          // Add the instance to scalecube
-          scalecubeBuilder.services(instance);
-
-          // Add the service to the internal registry (TODO should be done by the service itself, not the workspace)
-          return this.register({
-            serviceName,
-            displayName,
-            definition: options.definition,
-          });
+            res({ definition: options.definition, reference: instance });
+          })
         });
 
-        Promise.all(imports)
-          .then(() => {
-            this.internalSc = scalecubeBuilder.build();
+        Promise.all(services as Promise<Service>[])
+          .then(s => {
+            console.log('LOAD SUCCESS', s);
+            this.microservice = Microservices.create({ services: s });
             this.started = true;
             resolve();
           })
           .catch((e) => reject(e));
+
+
+        // Init layout
+
+        // Init orchestrator
       }
     });
   }
@@ -76,7 +85,7 @@ export class Workspace implements WorkspaceInterface {
         : resolve({
             serviceName: service.serviceName,
             displayName: service.displayName,
-            proxy: this.internalSc
+            proxy: this.microservice
               .proxy()
               .api({ definition: service.definition })
               .create(),

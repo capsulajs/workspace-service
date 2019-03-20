@@ -34,19 +34,19 @@ class Orchestrator {
               .subscribe();
           },
         },
-        {
-          name: 'invokeService',
-          id: '2',
-          flow: async () => {
-            const methodSelector = await workspace.service('MethodSelector');
-            const invoker = await workspace.service('Invoker');
-
-            methodSelector
-              .selected()
-              .do((method: any) => invoker.input({ service: method.service }))
-              .subscribe();
-          },
-        },
+        // {
+        //   name: 'invokeService',
+        //   id: '2',
+        //   flow: async () => {
+        //     const methodSelector = await workspace.service('MethodSelector');
+        //     const invoker = await workspace.service('Invoker');
+        //
+        //     methodSelector
+        //       .selected()
+        //       .do((method: any) => invoker.input({ service: method.service }))
+        //       .subscribe();
+        //   },
+        // },
       ],
     };
   }

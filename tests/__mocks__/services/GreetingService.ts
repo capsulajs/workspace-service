@@ -1,6 +1,6 @@
 // Service that register itself, expose hello and expose helloToParrot that requires ParrotService from workspace
 export class GreetingService {
-  static hello() {
+  public static hello() {
     return Promise.resolve('Hello');
   }
 

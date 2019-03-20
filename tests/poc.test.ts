@@ -10,6 +10,7 @@ const config = {
       path: 'services/ParrotService',
       getInstance: (path: string, token: string) => {
         return import(path).then((module: any) => {
+          console.log(path, module);
           return new module.ParrotService(token);
         });
       },
@@ -17,7 +18,7 @@ const config = {
         definition: {
             serviceName: 'ParrotService',
             methods: {
-              repeat: { asyncModel: 'Promise' },
+              repeat: { asyncModel: 'RequestResponse' },
             },
         },
       },
@@ -28,6 +29,7 @@ const config = {
       path: 'services/GreetingService',
       getInstance: (path: string, token: string) => {
         return import(path).then((module: any) => {
+          console.log(path, module);
           return new module.GreetingService(token);
         });
       },
@@ -35,8 +37,8 @@ const config = {
         definition: {
           serviceName: 'GreetingService',
           methods: {
-            hello: { asyncModel: 'Promise' },
-            helloToParrot: { asyncModel: 'Promise' },
+            hello: { asyncModel: 'RequestResponse' },
+            helloToParrot: { asyncModel: 'RequestResponse' },
           },
         }
       },
@@ -47,14 +49,14 @@ const config = {
       path: 'services/SecretService',
       getInstance: (path: string, token: string) => {
         return import(path).then((module: any) => {
-          return new module.GreetingService(token);
+          return new module.SecretService(token);
         });
       },
       options: {
         definition: {
           serviceName: 'SecretService',
           methods: {
-            tellMeASecret: { asyncModel: 'Promise' },
+            tellMeASecret: { asyncModel: 'RequestResponse' },
           },
         }
       },
@@ -71,13 +73,7 @@ const config = {
             return module.Catalog;
           })
         },
-        render: (Component: any, props: any, domSelector: string) => {
-          return new Promise(async (resolve, reject) => {
-            const ReactDOM = await import('https://unpkg.com/react-dom@16/umd/react-dom.development.js')
-            ReactDOM.unmountComponentAtNode(domSelector);
-            ReactDOM.render((<Component {...props}>), domSelector, resolve);
-          })
-        },
+        render: (Component: any, props: any, domSelector: string) => {},
         definition: {
           name: 'CatalogComponent',
           props: {},
@@ -97,13 +93,13 @@ describe('POC', () => {
 
     await workspace.start().catch((e: any) => console.log(e));
 
-    await workspace.register({
-      serviceName: 'ParrotService',
-      displayName: 'Parrot',
-    });
-
-    const parrotService = workspace.service({ serviceName: 'ParrotService' });
-    console.log(parrotService.proxy);
+    // await workspace.register({
+    //   serviceName: 'ParrotService',
+    //   displayName: 'Parrot',
+    // });
+    //
+    // const parrotService = workspace.service({ serviceName: 'ParrotService' });
+    // console.log(parrotService.proxy);
     // console.log(workspace.internalSc);
     // return parrotService.proxy.repeat('Say heyyyy')
     //   .then((result: any)=> console.log(result))
