@@ -1,11 +1,13 @@
 
 import { Workspace } from '../src/Workspace';
+import { Microservices } from '@scalecube/scalecube-microservice';
+import { ParrotService } from './__mocks__/services/ParrotService';
 
 const config = {
   name: 'POC',
   services: [
     {
-      name: 'ParrotService',
+      serviceName: 'ParrotService',
       displayName: 'Parrot',
       path: 'services/ParrotService',
       getInstance: (path: string, token: string) => {
@@ -43,24 +45,6 @@ const config = {
         }
       },
     },
-    {
-      serviceName: 'SecretService',
-      displayName: 'Secret',
-      path: 'services/SecretService',
-      getInstance: (path: string, token: string) => {
-        return import(path).then((module: any) => {
-          return new module.SecretService(token);
-        });
-      },
-      options: {
-        definition: {
-          serviceName: 'SecretService',
-          methods: {
-            tellMeASecret: { asyncModel: 'RequestResponse' },
-          },
-        }
-      },
-    },
   ],
   components: [
     {
@@ -87,23 +71,24 @@ const config = {
 describe('POC', () => {
 
   it('...', async () => {
+    expect.assertions(3);
 
     (window as any)['workspace'] = new Workspace({ token: 'abc', config});
     const workspace = (window as any)['workspace'];
 
     await workspace.start().catch((e: any) => console.log(e));
 
-    // await workspace.register({
-    //   serviceName: 'ParrotService',
-    //   displayName: 'Parrot',
-    // });
-    //
-    // const parrotService = workspace.service({ serviceName: 'ParrotService' });
-    // console.log(parrotService.proxy);
-    // console.log(workspace.internalSc);
-    // return parrotService.proxy.repeat('Say heyyyy')
-    //   .then((result: any)=> console.log(result))
-    //   .catch((e: any)=> console.log(e));
-  })
+    const parrotService = await workspace.service({ serviceName: 'ParrotService' });
+    const greetingService = await workspace.service({ serviceName: 'GreetingService' });
+
+    await expect(parrotService.proxy.repeat('Say heyyyy'))
+      .resolves.toEqual({ response: 'Say heyyyy', token: 'abc' });
+
+    await expect(greetingService.proxy.hello())
+      .resolves.toEqual('Hello');
+
+    await expect(greetingService.proxy.helloToParrot('Hey parrot'))
+      .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
+  });
 });
 

@@ -3,7 +3,7 @@ import { StartRequest } from './api/methods/start';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
-import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
+import { ProxyOptions, Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
 
 interface RegisteredService {
   serviceName: string;
@@ -79,16 +79,14 @@ export class Workspace implements WorkspaceInterface {
       }
 
       const service = this.serviceRegistry[serviceRequest.serviceName];
+      console.log('registry', this.serviceRegistry);
 
       return !service
         ? reject('Service not found')
         : resolve({
             serviceName: service.serviceName,
             displayName: service.displayName,
-            proxy: this.microservice
-              .proxy()
-              .api({ definition: service.definition })
-              .create(),
+            proxy: this.microservice.createProxy({ serviceDefinition: service.definition }),
           });
     });
   }
