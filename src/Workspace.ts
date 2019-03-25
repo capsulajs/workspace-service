@@ -3,7 +3,7 @@ import { StartRequest } from './api/methods/start';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
-import { ProxyOptions, Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
+import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
 
 interface RegisteredService {
   serviceName: string;
@@ -31,20 +31,14 @@ export class Workspace implements WorkspaceInterface {
         reject('Already started');
       } else {
 
-        // TODO Go over each service of this.config.services :
-        // - Use service.getInstance to create instance of it
-        // - Register the service in the workspace
-
-        // When all services are instantiated and registered :
-        // - Create scalecube microservice with all instances
-
         const services = this.config.services.map(async (service: any) => {
           const { serviceName, displayName, path, options, getInstance } = service;
           return new Promise(async (res, rej) => {
-            // TODO add error path
+            // TODO catch errors
             const instance = await getInstance(path, this.token);
 
-            // Add the service to the internal registry (TODO should be done by the service itself, not the workspace)
+            // TODO should be done by the service itself, not the workspace
+            // Add the service to the internal registry
             await this.register({
               serviceName,
               displayName,
@@ -60,18 +54,25 @@ export class Workspace implements WorkspaceInterface {
             console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
             this.started = true;
+
+            // TODO Load  and register components
+
+            // Init layout
+            // const layout = new Layout(this.token);
+            // layout.render();
+
+            // Init orchestrator
+            // const orchestrator = new Orchestrator(this.token);
+            // orchestrator.init();
+
             resolve();
           })
           .catch((e) => reject(e));
-
-
-        // Init layout
-
-        // Init orchestrator
       }
     });
   }
 
+  // TODO change this to serviceS
   public service(serviceRequest: ServiceRequest): Promise<ServiceResponse> {
     return new Promise((resolve, reject) => {
       if (!this.started) {

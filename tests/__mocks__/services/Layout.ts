@@ -1,4 +1,4 @@
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 /**
  * Layout service is responsible for each component to:
@@ -24,20 +24,36 @@ class Layout {
       ],
       components: [
         {
-          name: 'Catalog',
-          flow: async () => {
-            const methodSelector = await workspace.service('MethodSelector');
-            return methodSelector.output(); // TODO return observable of props
+          name: 'EnvironmentSelector',
+          data$: async () => {
+            const workspace = (window as any)['workspace'];
+            const envSelector = (await workspace.service('EnvSelector')).proxy;
+
+            return envSelector.output()
+              .combineLatest(envSelector.selectedMethod())
+              .map(e => ({
+                envs: e[0],
+                selectedEnv: e[1],
+                selectEnv: envSelector.selectEnv()
+              }));
           },
-          nodeSelector: '#grid #catalog',
+          nodeSelector: '#grid #envSelector',
         },
         {
-          name: 'Logs',
-          flow: async () => {
-            const invoker = await workspace.service('Invoker');
-            return invoker.logs(); // TODO return observable of props
+          name: 'Catalog',
+          data$: async () => {
+            const workspace = (window as any)['workspace'];
+            const methodSelector = (await workspace.service('MethodSelector')).proxy;
+
+            return methodSelector.output()
+              .combineLatest(methodSelector.selectedMethod())
+              .map(e => ({
+                methods: e[0],
+                selectedMethod: e[1],
+                selectMethod: methodSelector.selectMethod()
+              }));
           },
-          nodeSelector: '#grid #logs',
+          nodeSelector: '#grid #catalog',
         },
       ],
     };
@@ -46,20 +62,22 @@ class Layout {
   private prepareLayout(): Promise<void> {
     this.config.thingsThatYouWantToLoadBeforeTheComponentsLikeGrid.forEach((component, i) => {
       const components = (window as any)['workspace'].service('Components');
+      // TODO
       components[component.name].render(component.props, this.config.components[i].nodeSelector);
     });
     return Promise.resolve();
   }
 
-  public async render() {
-    await this.prepareLayout();
-
-    // What layout should do for each component
-    this.config.components.forEach((component, i) => {
-      component.flow().subscribe((props) => {
-        const components = (window as any)['workspace'].service('Components');
-        components[component.name].render(props, this.config.components[i].nodeSelector);
-      });
+  defineComponents(): Promise<void> {
+    this.config.components.forEach(component => {
+      window.customElements.define(`workspace-${component.name}`, component.constructor);
     });
+    return Promise.resolve();
   }
+
+  appendToDom(): Promise<void> {
+
+    return Promise.resolve();
+  }
+
 }

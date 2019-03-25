@@ -11,8 +11,9 @@ class Orchestrator {
           name: 'setEnvironments',
           id: '1',
           flow: async () => {
-            const envRegistry = await workspace.service('EnvRegistry');
-            const envSelector = await workspace.service('EnvSelector');
+            const workspace = (window as any)['workspace'];
+            const envRegistry = (await workspace.service('EnvRegistry')).proxy;
+            const envSelector = (await workspace.service('EnvSelector')).proxy;
 
             envRegistry
               .environments$({})
@@ -25,8 +26,9 @@ class Orchestrator {
           name: 'setMethods',
           id: '2',
           flow: async () => {
-            const envSelector = await workspace.service('EnvSelector');
-            const methodSelector = await workspace.service('MethodSelector');
+            const workspace = (window as any)['workspace'];
+            const envSelector = (await workspace.service('EnvSelector')).proxy;
+            const methodSelector = (await workspace.service('MethodSelector')).proxy;
 
             envSelector
               .selected({})
@@ -34,19 +36,6 @@ class Orchestrator {
               .subscribe();
           },
         },
-        // {
-        //   name: 'invokeService',
-        //   id: '2',
-        //   flow: async () => {
-        //     const methodSelector = await workspace.service('MethodSelector');
-        //     const invoker = await workspace.service('Invoker');
-        //
-        //     methodSelector
-        //       .selected()
-        //       .do((method: any) => invoker.input({ service: method.service }))
-        //       .subscribe();
-        //   },
-        // },
       ],
     };
   }
