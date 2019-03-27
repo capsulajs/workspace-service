@@ -30,14 +30,6 @@ export class Workspace implements WorkspaceInterface {
       if (this.started) {
         reject('Already started');
       } else {
-
-        // TODO Go over each service of this.config.services :
-        // - Use service.getInstance to create instance of it
-        // - Register the service in the workspace
-
-        // When all services are instantiated and registered :
-        // - Create scalecube microservice with all instances
-
         const services = this.config.services.map(async (service: any) => {
           const { serviceName, displayName, path, options, getInstance } = service;
           return new Promise(async (res, rej) => {
@@ -55,7 +47,7 @@ export class Workspace implements WorkspaceInterface {
           })
         });
 
-        Promise.all(services as Promise<Service>[])
+        Promise.all(services as Array<Promise<Service>>)
           .then(s => {
             console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
