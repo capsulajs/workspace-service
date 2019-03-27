@@ -19,5 +19,3 @@ export class Catalog extends HTMLElement {
         ReactDOM.render(<CatalogComponent { ...props } />, mountPoint);
     }
 }
-
-customElements.defi
