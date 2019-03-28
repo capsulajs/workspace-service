@@ -30,7 +30,7 @@ class Layout {
             const envSelector = (await workspace.service('EnvSelector')).proxy;
 
             return envSelector.output()
-              .combineLatest(envSelector.selectedMethod())
+              .combineLatest(envSelector.selectedEnv())
               .map(e => ({
                 envs: e[0],
                 selectedEnv: e[1],
@@ -58,6 +58,8 @@ class Layout {
       ],
     };
   }
+
+  // TODO everything here is draft or old
 
   private prepareLayout(): Promise<void> {
     this.config.thingsThatYouWantToLoadBeforeTheComponentsLikeGrid.forEach((component, i) => {

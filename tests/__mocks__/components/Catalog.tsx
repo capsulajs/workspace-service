@@ -8,6 +8,7 @@ export class Catalog extends HTMLElement {
 
     constructor() {
         super();
+        // TODO this config should come from workspace
         this.config = {
             domSelector: '',
         }
