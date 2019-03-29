@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Catalog as CatalogComponent } from '@capsulajs/capsulahub-ui';
+import { dataComponentHoc } from '../../../src/dataComponentHoc';
+import { from } from 'rxjs';
 
 
 export class Catalog extends HTMLElement {
@@ -16,7 +18,7 @@ export class Catalog extends HTMLElement {
     public connectedCallback() {
         const mountPoint = document.querySelector(this.config.domSelector);
         this.attachShadow({ mode: 'open' }).appendChild(mountPoint);
-        const props = {};
-        ReactDOM.render(<CatalogComponent { ...props } />, mountPoint);
+
+        ReactDOM.render(dataComponentHoc(CatalogComponent, from([1, 2, 3])), mountPoint);
     }
 }
