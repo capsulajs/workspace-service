@@ -61,7 +61,7 @@ export class Selector<T extends K, K> implements SelectorInterface<T, K> {
       return Object.keys(this.selectedSubject$.getValue()).includes(requestKey) &&
         this.selectedSubject$.getValue()[requestKey] === selectRequest.key[requestKey]
     })) {
-      return Promise.reject(new Error('alreadySelected'));
+      return Promise.reject(new Error(errorMessage.alreadySelected));
     }
 
     return new Promise((resolve, reject) => {
