@@ -1,4 +1,5 @@
 // import { from, Observable } from 'rxjs';
+import Catalog from '../../webComponents/Catalog';
 
 /**
  * Layout service is responsible for each component to:
@@ -62,10 +63,15 @@ export class Layout {
 
   public render() {
     return Promise.all(this.config.components.map(({ name, nodeSelector, path }) => {
-      return import(path)
-        .then((data) => {
-          console.log('data from dynamic import', data);
-        });
+      return new Promise((resolve) => {
+        customElements.define('web-catalog', Catalog);
+        const webComponentEl = document.createElement('web-catalog');
+
+        console.log('webComponentEl', webComponentEl);
+
+        document.getElementById('root')!.appendChild(webComponentEl);
+        resolve();
+      });
     }));
   }
 
