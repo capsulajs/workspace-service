@@ -1,9 +1,9 @@
 
 import { Workspace } from '../src/Workspace';
-import { Microservices } from '@scalecube/scalecube-microservice';
-import { ParrotService } from './__mocks__/services/ParrotService';
-
-// import Catalog from './__mocks__/components/Catalog'
+// import { Microservices } from '@scalecube/scalecube-microservice';
+// import { ParrotService } from '../src/services/custom/ParrotService';
+//
+// // import Catalog from './__mocks__/components/Catalog'
 
 const config = {
   name: 'POC',
@@ -11,7 +11,7 @@ const config = {
     {
       serviceName: 'ParrotService',
       displayName: 'Parrot',
-      path: 'services/ParrotService',
+      path: '../src/services/custom/ParrotService',
       getInstance: (path: string, token: string) => {
         return import(path).then((module: any) => {
           console.log(path, module);
@@ -30,7 +30,7 @@ const config = {
     {
       serviceName: 'GreetingService',
       displayName: 'Greeting',
-      path: 'services/GreetingService',
+      path: '../src/services/custom/GreetingService',
       getInstance: (path: string, token: string) => {
         return import(path).then((module: any) => {
           console.log(path, module);
@@ -49,23 +49,23 @@ const config = {
     },
   ],
   components: [
-    {
-      name: 'CatalogComponent',
-      displayName: 'Catalog',
-      path: 'services/CatalogComponent',
-      options: {
-        import: (path: string) => {
-          return import(path).then((module: any) => {
-            return module.Catalog;
-          })
-        },
-        render: (Component: any, props: any, domSelector: string) => {},
-        definition: {
-          name: 'CatalogComponent',
-          props: {},
-        },
-      },
-    },
+    // {
+    //   name: 'CatalogComponent',
+    //   displayName: 'Catalog',
+    //   path: '../src/services/custom/CatalogComponent',
+    //   options: {
+    //     import: (path: string) => {
+    //       return import(path).then((module: any) => {
+    //         return module.Catalog;
+    //       })
+    //     },
+    //     render: (Component: any, props: any, domSelector: string) => {},
+    //     definition: {
+    //       name: 'CatalogComponent',
+    //       props: {},
+    //     },
+    //   },
+    // },
   ]
 };
 
@@ -93,18 +93,18 @@ describe('POC', () => {
       .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
   });
 
-  it('Layout', async (done) => {
-    // expect.assertions(3);
-
-    // console.log('Cat', Catalog);
-
-    (window as any)['workspace'] = new Workspace({ token: 'abc', config});
-    const workspace = (window as any)['workspace'];
-
-    await workspace.start();
-
-    setTimeout(done, 2000);
-  });
+  // it('Layout', async (done) => {
+  //   // expect.assertions(3);
+  //
+  //   // console.log('Cat', Catalog);
+  //
+  //   (window as any)['workspace'] = new Workspace({ token: 'abc', config});
+  //   const workspace = (window as any)['workspace'];
+  //
+  //   await workspace.start();
+  //
+  //   setTimeout(done, 2000);
+  // });
 
 });
 

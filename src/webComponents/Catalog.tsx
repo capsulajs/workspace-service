@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 // import { Catalog as CatalogComponent } from '@capsulajs/capsulahub-ui';
-import { dataComponentHoc } from '../../../src/dataComponentHoc';
+import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { from } from 'rxjs';
 
 const Hello = (props) => {

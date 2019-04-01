@@ -4,7 +4,7 @@ import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
 import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
-import { Layout } from '../tests/__mocks__/services/Layout';
+import { Layout } from './services/core/Layout';
 
 interface RegisteredService {
   serviceName: string;

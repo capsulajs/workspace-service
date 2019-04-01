@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { isKeyValid } from '../helpers/validators';
-import { errorMessage, validationMessages } from '../helpers/messages';
+import { isKeyValid } from '../../../tests/__mocks__/helpers/validators';
+import { errorMessage, validationMessages } from '../../../tests/__mocks__/helpers/messages';
 import { map, take } from 'rxjs/operators';
 
 interface SelectorInterface<T extends K, K> {

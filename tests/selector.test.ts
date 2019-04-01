@@ -1,4 +1,4 @@
-import { Selector } from './__mocks__/services/Selector';
+import { Selector } from '../src/services/custom/Selector';
 import { from } from 'rxjs';
 import { errorMessage, validationMessages } from './__mocks__/helpers/messages';
 

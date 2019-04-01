@@ -42,7 +42,7 @@ export class Layout {
         {
           name: 'Catalog',
           nodeSelector: '#grid #catalog',
-          path: '../components/Catalog.tsx'
+          path: '../../webComponents/Catalog.tsx'
           // data$: async () => {
           //   const workspace = (window as any)['workspace'];
           //   const methodSelector = (await workspace.service('MethodSelector')).proxy;
