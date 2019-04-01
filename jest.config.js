@@ -4,11 +4,12 @@ module.exports = {
     '\\.ts$': 'ts-jest',
   },
   testRegex: '.*\\.test\\.ts$',
-  moduleFileExtensions: ['ts', 'js'],
+  moduleFileExtensions: ['ts', 'tsx', 'js'],
   moduleDirectories: ['src', 'node_modules'],
   testEnvironment: 'node',
   globals: {
     window: {},
     document: {},
+    HTMLElement: {}
   },
 };

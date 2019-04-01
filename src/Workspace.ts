@@ -4,6 +4,7 @@ import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
 import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
+import { Layout } from '../tests/__mocks__/services/Layout';
 
 interface RegisteredService {
   serviceName: string;
@@ -51,15 +52,15 @@ export class Workspace implements WorkspaceInterface {
 
         Promise.all(services as Array<Promise<Service>>)
           .then(s => {
-            console.log('LOAD SUCCESS', s);
+            // console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
             this.started = true;
 
             // TODO Load  and register components
 
             // Init layout
-            // const layout = new Layout(this.token);
-            // layout.render();
+            const layout = new Layout(this.token);
+            layout.render();
 
             // Init orchestrator
             // const orchestrator = new Orchestrator(this.token);

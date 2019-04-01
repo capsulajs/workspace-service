@@ -1,4 +1,4 @@
-import { from, Observable } from 'rxjs';
+// import { from, Observable } from 'rxjs';
 
 /**
  * Layout service is responsible for each component to:
@@ -8,7 +8,7 @@ import { from, Observable } from 'rxjs';
  *
  */
 
-class Layout {
+export class Layout {
   private config: any;
 
   constructor(token: string) {
@@ -23,63 +23,73 @@ class Layout {
         },
       ],
       components: [
-        {
-          name: 'EnvironmentSelector',
-          data$: async () => {
-            const workspace = (window as any)['workspace'];
-            const envSelector = (await workspace.service('EnvSelector')).proxy;
-
-            return envSelector.output()
-              .combineLatest(envSelector.selectedEnv())
-              .map(e => ({
-                envs: e[0],
-                selectedEnv: e[1],
-                selectEnv: envSelector.selectEnv()
-              }));
-          },
-          nodeSelector: '#grid #envSelector',
-        },
+        // {
+        //   name: 'EnvironmentSelector',
+        //   data$: async () => {
+        //     const workspace = (window as any)['workspace'];
+        //     const envSelector = (await workspace.service('EnvSelector')).proxy;
+        //
+        //     return envSelector.output()
+        //       .combineLatest(envSelector.selectedEnv())
+        //       .map(e => ({
+        //         envs: e[0],
+        //         selectedEnv: e[1],
+        //         selectEnv: envSelector.selectEnv()
+        //       }));
+        //   },
+        //   nodeSelector: '#grid #envSelector',
+        // },
         {
           name: 'Catalog',
-          data$: async () => {
-            const workspace = (window as any)['workspace'];
-            const methodSelector = (await workspace.service('MethodSelector')).proxy;
-
-            return methodSelector.output()
-              .combineLatest(methodSelector.selectedMethod())
-              .map(e => ({
-                methods: e[0],
-                selectedMethod: e[1],
-                selectMethod: methodSelector.selectMethod()
-              }));
-          },
           nodeSelector: '#grid #catalog',
+          path: '../components/Catalog.tsx'
+          // data$: async () => {
+          //   const workspace = (window as any)['workspace'];
+          //   const methodSelector = (await workspace.service('MethodSelector')).proxy;
+          //
+          //   return methodSelector.output()
+          //     .combineLatest(methodSelector.selectedMethod())
+          //     .map(e => ({
+          //       methods: e[0],
+          //       selectedMethod: e[1],
+          //       selectMethod: methodSelector.selectMethod()
+          //     }));
+          // },
         },
       ],
     };
   }
 
-  // TODO everything here is draft or old
-
-  private prepareLayout(): Promise<void> {
-    this.config.thingsThatYouWantToLoadBeforeTheComponentsLikeGrid.forEach((component, i) => {
-      const components = (window as any)['workspace'].service('Components');
-      // TODO
-      components[component.name].render(component.props, this.config.components[i].nodeSelector);
-    });
-    return Promise.resolve();
+  public render() {
+    return Promise.all(this.config.components.map(({ name, nodeSelector, path }) => {
+      return import(path)
+        .then((data) => {
+          console.log('data from dynamic import', data);
+        });
+    }));
   }
 
-  defineComponents(): Promise<void> {
-    this.config.components.forEach(component => {
-      window.customElements.define(`workspace-${component.name}`, component.constructor);
-    });
-    return Promise.resolve();
-  }
-
-  appendToDom(): Promise<void> {
-
-    return Promise.resolve();
-  }
+  // // TODO everything here is draft or old
+  //
+  // private prepareLayout(): Promise<void> {
+  //   this.config.thingsThatYouWantToLoadBeforeTheComponentsLikeGrid.forEach((component, i) => {
+  //     const components = (window as any)['workspace'].service('Components');
+  //     // TODO
+  //     components[component.name].render(component.props, this.config.components[i].nodeSelector);
+  //   });
+  //   return Promise.resolve();
+  // }
+  //
+  // defineComponents(): Promise<void> {
+  //   this.config.components.forEach(component => {
+  //     window.customElements.define(`workspace-${component.name}`, component.constructor);
+  //   });
+  //   return Promise.resolve();
+  // }
+  //
+  // appendToDom(): Promise<void> {
+  //
+  //   return Promise.resolve();
+  // }
 
 }

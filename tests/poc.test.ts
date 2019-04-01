@@ -3,6 +3,8 @@ import { Workspace } from '../src/Workspace';
 import { Microservices } from '@scalecube/scalecube-microservice';
 import { ParrotService } from './__mocks__/services/ParrotService';
 
+// import Catalog from './__mocks__/components/Catalog'
+
 const config = {
   name: 'POC',
   services: [
@@ -90,5 +92,19 @@ describe('POC', () => {
     await expect(greetingService.proxy.helloToParrot('Hey parrot'))
       .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
   });
+
+  it('Layout', async (done) => {
+    // expect.assertions(3);
+
+    // console.log('Cat', Catalog);
+
+    (window as any)['workspace'] = new Workspace({ token: 'abc', config});
+    const workspace = (window as any)['workspace'];
+
+    await workspace.start();
+
+    setTimeout(done, 2000);
+  });
+
 });
 
