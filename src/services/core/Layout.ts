@@ -37,8 +37,8 @@ export class Layout {
               }
             }, {} as any);
           const webComponent = new WebComponent(services);
-
-          document.querySelector(nodeSelector)!.appendChild(componentCreator(services));
+          webComponent.setState();
+          document.querySelector(nodeSelector)!.appendChild(webComponent);
         });
     }));
   }
