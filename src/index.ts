@@ -1,47 +1,54 @@
+import '@babel/polyfill'
 import { Workspace } from './Workspace';
+import { ParrotService } from './services/custom/ParrotService'
+import { GreetingService } from './services/custom/GreetingService'
 
 const config = {
   name: 'POC',
   services: [
-    // {
-    //   serviceName: 'ParrotService',
-    //   displayName: 'Parrot',
-    //   path: './services/custom/ParrotService',
-    //   getInstance: (path: string, token: string) => {
-    //     return import(path).then((module: any) => {
-    //       console.log(path, module);
-    //       return new module.ParrotService(token);
-    //     });
-    //   },
-    //   options: {
-    //     definition: {
-    //       serviceName: 'ParrotService',
-    //       methods: {
-    //         repeat: { asyncModel: 'RequestResponse' },
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   serviceName: 'GreetingService',
-    //   displayName: 'Greeting',
-    //   path: './services/custom/GreetingService',
-    //   getInstance: (path: string, token: string) => {
-    //     return import(path).then((module: any) => {
-    //       console.log(path, module);
-    //       return new module.GreetingService(token);
-    //     });
-    //   },
-    //   options: {
-    //     definition: {
-    //       serviceName: 'GreetingService',
-    //       methods: {
-    //         hello: { asyncModel: 'RequestResponse' },
-    //         helloToParrot: { asyncModel: 'RequestResponse' },
-    //       },
-    //     }
-    //   },
-    // },
+    {
+      serviceName: 'ParrotService',
+      displayName: 'Parrot',
+      path: './services/custom/ParrotService',
+      getInstance: (path: string, token: string) => {
+        return new Promise((resolve) => {
+          resolve(new ParrotService(token));
+        });
+        // return import(path).then((module: any) => {
+        //   return new module.ParrotService(token);
+        // });
+      },
+      options: {
+        definition: {
+          serviceName: 'ParrotService',
+          methods: {
+            repeat: { asyncModel: 'RequestResponse' },
+          },
+        },
+      },
+    },
+    {
+      serviceName: 'GreetingService',
+      displayName: 'Greeting',
+      path: './services/custom/GreetingService',
+      getInstance: (path: string, token: string) => {
+        return new Promise((resolve) => {
+          resolve(new GreetingService());
+        });
+        // return import(path).then((module: any) => {
+        //   return new module.GreetingService(token);
+        // });
+      },
+      options: {
+        definition: {
+          serviceName: 'GreetingService',
+          methods: {
+            hello: { asyncModel: 'RequestResponse' },
+            helloToParrot: { asyncModel: 'RequestResponse' },
+          },
+        }
+      },
+    },
   ],
   components: {
     componentsBeforeLoad: [

@@ -93,18 +93,5 @@ describe('POC', () => {
       .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
   });
 
-  // it('Layout', async (done) => {
-  //   // expect.assertions(3);
-  //
-  //   // console.log('Cat', Catalog);
-  //
-  //   (window as any)['workspace'] = new Workspace({ token: 'abc', config});
-  //   const workspace = (window as any)['workspace'];
-  //
-  //   await workspace.start();
-  //
-  //   setTimeout(done, 2000);
-  // });
-
 });
 

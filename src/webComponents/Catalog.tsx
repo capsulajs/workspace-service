@@ -1,9 +1,8 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { Observable } from 'rxjs';
 // import { Catalog as CatalogComponent } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
-import { interval } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 const UICatalog = (props) => {
     return (
@@ -18,26 +17,22 @@ const template = document.createElement('template');
 template.innerHTML = `<div id="${mountPoint}"></div>`;
 
 export default class Catalog extends HTMLElement {
-    // private config: any;
     private root: any;
+    private data$?: Observable<any>;
 
     constructor() {
         super();
         this.root = this.attachShadow({ mode: 'open' });
         this.root.appendChild(template.content.cloneNode(true));
-
-        // TODO this config should come from workspace
-        // this.config = {
-        //     domSelector: '',
-        // }
     }
+
+    set data(data$) {
+        console.log('setter for data', data$);
+        this.data$ = data$;
+    }
+
     public connectedCallback() {
-        const data$ = interval(1000)
-          .pipe(
-            map((n: number) => ({ a: `Hello ${n}`, b: `World ${n}` }))
-          );
-        const ComponentWithData = dataComponentHoc(UICatalog, data$);
-        console.log('ComponentWithData', ComponentWithData);
+        const ComponentWithData = dataComponentHoc(UICatalog, this.data$);
         ReactDOM.render(<ComponentWithData />, this.root.getElementById(mountPoint);
     }
 }

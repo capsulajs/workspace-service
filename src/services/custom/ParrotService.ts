@@ -1,4 +1,7 @@
 // Service that require token, register itself and expose repeat method
+import { interval } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 export class ParrotService {
   token: string;
 
@@ -14,5 +17,12 @@ export class ParrotService {
 
   public repeat(repeatRequest: any) {
     return Promise.resolve({ response: repeatRequest, token: this.token });
+  }
+
+  public data$() {
+    return interval(1000)
+      .pipe(
+        map((n: number) => ({ a: `Hello ${n}`, b: `World ${n}` }))
+      );
   }
 }

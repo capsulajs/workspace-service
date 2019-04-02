@@ -1,4 +1,5 @@
 import Catalog from '../../webComponents/Catalog';
+import { data$ } from '../../webComponents/helpers/catalogDataStream';
 
 const importFake = (path: string): Promise<any> => {
   const components = {
@@ -29,9 +30,9 @@ export class Layout {
         .then((data: any) => data.default)
         .then((WebComponent: any) => {
           customElements.define(name, WebComponent);
-
-          const el = document.createElement(name);
-          document.querySelector(nodeSelector)!.appendChild(el);
+          const webComponent = document.createElement(name);
+          webComponent.data = data$;
+          document.querySelector(nodeSelector)!.appendChild(webComponent);
         });
     }));
   }
