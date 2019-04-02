@@ -81,7 +81,6 @@ export class Workspace implements WorkspaceInterface {
       }
 
       const service = this.serviceRegistry[serviceRequest.serviceName];
-      console.log('registry', this.serviceRegistry);
 
       return !service
         ? reject('Service not found')

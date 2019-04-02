@@ -24,23 +24,25 @@ export class Layout {
   }
 
   public render() {
-    return Promise.all(this.config.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
-      return importFake(path)
-        .then((module: any) => module.default)
-        .then((WebComponent: any) => {
-          customElements.define(name, WebComponent);
-          const services = Object.values(window['workspace'].serviceRegistry)
-            .reduce((acc: any, current: any) => {
-              return {
-                ...acc,
-                [current.serviceName]: window['workspace'].microservice.createProxy({ serviceDefinition: current.definition })
-              }
-            }, {} as any);
-          const webComponent = new WebComponent(services);
-          webComponent.setState();
-          document.querySelector(nodeSelector)!.appendChild(webComponent);
-        });
-    }));
+    return Promise.all(
+      Object.values(window['workspace'].serviceRegistry)
+        .map((serviceData: any) => window['workspace'].service({ serviceName: serviceData.serviceName }))
+    )
+      .then((servicesList) => {
+        const services = servicesList
+          .reduce((acc: any, service: any) => {
+            return { ...acc, [service.serviceName]: service.proxy }
+          }, {} as any);
+
+        return Promise.all(this.config.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
+          return importFake(path)
+            .then((module: any) => module.default)
+            .then((WebComponent) => {
+              customElements.define(name, WebComponent);
+              document.querySelector(nodeSelector)!.appendChild(new WebComponent(services));
+            });
+        }));
+      });
   }
 
 }

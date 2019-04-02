@@ -18,9 +18,7 @@ export const dataComponentHoc = (Component: any, data$: any) => {
 
     public render() {
       // @ts-ignore
-      // @tslint-disable
-      return (<Component {...this.state} />)
+      return <Component {...this.state} />;
     }
-
   }
 }
