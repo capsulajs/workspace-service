@@ -4,7 +4,6 @@ import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import { Catalog as CatalogComponent } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
-import WebComponentWithData from './helpers/WebComponentWithData';
 
 const UICatalog = (props) => {
     return (
