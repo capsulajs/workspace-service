@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "parcel src/index.html --target browser",
+    "start": "parcel src/index.html --target browser --no-cache",
     "lint": "tslint -p tsconfig.json"
   },
   "husky": {

@@ -43,25 +43,22 @@ const config = {
     //   },
     // },
   ],
-  components: [
-    // {
-    //   name: 'CatalogComponent',
-    //   displayName: 'Catalog',
-    //   path: '../src/services/custom/CatalogComponent',
-    //   options: {
-    //     import: (path: string) => {
-    //       return import(path).then((module: any) => {
-    //         return module.Catalog;
-    //       })
-    //     },
-    //     render: (Component: any, props: any, domSelector: string) => {},
-    //     definition: {
-    //       name: 'CatalogComponent',
-    //       props: {},
-    //     },
-    //   },
-    // },
-  ]
+  components: {
+    componentsBeforeLoad: [
+      {
+        name: 'web-grid',
+        nodeSelector: '#grid',
+        path: '../../webComponents/Grid.tsx'
+      }
+    ],
+    componentsAfterLoad: [
+      {
+        name: 'web-catalog',
+        nodeSelector: '#grid #catalog',
+        path: '../../webComponents/Catalog.tsx'
+      }
+    ]
+  }
 };
 
 (window as any)['workspace'] = new Workspace({ token: 'abc', config});

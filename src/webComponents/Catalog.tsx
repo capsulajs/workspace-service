@@ -15,7 +15,7 @@ const UICatalog = (props) => {
 
 const mountPoint = 'uc-catalog';
 const template = document.createElement('template');
-template.innerHTML = `<div id="${mountPoint}"></div>`
+template.innerHTML = `<div id="${mountPoint}"></div>`;
 
 export default class Catalog extends HTMLElement {
     // private config: any;

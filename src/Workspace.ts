@@ -59,7 +59,7 @@ export class Workspace implements WorkspaceInterface {
             // TODO Load  and register components
 
             // Init layout
-            const layout = new Layout(this.token);
+            const layout = new Layout({ token: this.token, config: this.config.components });
             layout.render();
 
             // Init orchestrator
