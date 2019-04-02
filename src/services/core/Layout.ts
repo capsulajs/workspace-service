@@ -1,9 +1,9 @@
-import Catalog from '../../webComponents/Catalog';
+import catalogCreator from '../../webComponents/Catalog';
 import { data$ } from '../../webComponents/helpers/catalogDataStream';
 
 const importFake = (path: string): Promise<any> => {
   const components = {
-    ['../../webComponents/Catalog.tsx']: Catalog
+    ['../../webComponents/Catalog.tsx']: catalogCreator
   };
 
   return Promise.resolve({ default: components[path] });
@@ -27,12 +27,21 @@ export class Layout {
   public render() {
     return Promise.all(this.config.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
       return importFake(path)
-        .then((data: any) => data.default)
-        .then((WebComponent: any) => {
-          customElements.define(name, WebComponent);
-          const webComponent = document.createElement(name);
-          webComponent.data = data$;
-          document.querySelector(nodeSelector)!.appendChild(webComponent);
+        .then((module: any) => module.default)
+        .then((componentCreator: any) => {
+          // customElements.define(name, WebComponent);
+          // const webComponent = document.createElement(name);
+          // webComponent.data = data$;
+
+          const services = Object.values(window['workspace'].serviceRegistry)
+            .reduce((acc: any, current: any) => {
+              return {
+                ...acc,
+                [current.serviceName]: window['workspace'].microservice.createProxy({ serviceDefinition: current.definition })
+              }
+            }, {} as any);
+
+          document.querySelector(nodeSelector)!.appendChild(componentCreator(services));
         });
     }));
   }

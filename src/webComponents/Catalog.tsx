@@ -1,13 +1,15 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 // import { Catalog as CatalogComponent } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
+import { createWebComponentWithData } from './helpers/createWebComponentWithData';
 
 const UICatalog = (props) => {
     return (
       <div id="ui-catalog-component">
-          {props.a} / {props.b}
+          {props.a}
       </div>
     )
 };
@@ -16,7 +18,7 @@ const mountPoint = 'uc-catalog';
 const template = document.createElement('template');
 template.innerHTML = `<div id="${mountPoint}"></div>`;
 
-export default class Catalog extends HTMLElement {
+class Catalog extends HTMLElement {
     private root: any;
     private data$?: Observable<any>;
 
@@ -27,7 +29,6 @@ export default class Catalog extends HTMLElement {
     }
 
     set data(data$) {
-        console.log('setter for data', data$);
         this.data$ = data$;
     }
 
@@ -35,4 +36,11 @@ export default class Catalog extends HTMLElement {
         const ComponentWithData = dataComponentHoc(UICatalog, this.data$);
         ReactDOM.render(<ComponentWithData />, this.root.getElementById(mountPoint);
     }
+}
+
+export default (services) => {
+    const data$ = from(services.ParrotService.repeat('Hello Idan')).pipe(
+      map((data: any) => ({ a: data.response }))
+    );
+    return createWebComponentWithData({ WebComponent: Catalog, data: data$ })
 }

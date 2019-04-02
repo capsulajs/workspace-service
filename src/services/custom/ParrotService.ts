@@ -18,11 +18,4 @@ export class ParrotService {
   public repeat(repeatRequest: any) {
     return Promise.resolve({ response: repeatRequest, token: this.token });
   }
-
-  public data$() {
-    return interval(1000)
-      .pipe(
-        map((n: number) => ({ a: `Hello ${n}`, b: `World ${n}` }))
-      );
-  }
 }
