@@ -84,7 +84,7 @@ export class Workspace implements WorkspaceInterface {
       console.log('registry', this.serviceRegistry);
 
       return !service
-        ? reject('Service not found')
+        ? reject(`Service not found: ${serviceRequest.serviceName}`)
         : resolve({
             serviceName: service.serviceName,
             displayName: service.displayName,
