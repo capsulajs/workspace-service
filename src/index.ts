@@ -1,7 +1,14 @@
 import '@babel/polyfill'
 import { Workspace } from './Workspace';
+import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { ParrotService } from './services/custom/ParrotService'
 import { GreetingService } from './services/custom/GreetingService'
+
+declare global {
+  interface Window {
+    workspace: WorkspaceInterface;
+  }
+}
 
 const config = {
   name: 'POC',

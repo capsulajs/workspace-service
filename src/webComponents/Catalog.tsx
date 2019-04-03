@@ -1,18 +1,26 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from, combineLatest } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
+import { Workspace as WorkspaceInterface } from '../api/Workspace';
+
+declare global {
+  interface Window {
+    workspace: WorkspaceInterface;
+  }
+}
 
 const UICatalog = (props) => {
   return (
     <div id="ui-catalog-component">
-      {props.a}
+      <p>Parrot: {props.parrot}</p>
+      <p>Greeting: {props.greeting}</p>
     </div>
   );
 };
 
-const mountPoint = 'uc-catalog';
+const mountPoint = 'react-catalog';
 const template = document.createElement('template');
 template.innerHTML = `<div id="${mountPoint}"></div>`;
 
@@ -33,15 +41,23 @@ class Catalog extends HTMLElement {
 }
 
 export default class CatalogWithData extends Catalog {
-  constructor(private services) {
-    super();
-    this.setState();
-  }
-
   private setState() {
-    this.state$ = from(this.services.ParrotService.repeat('Hello Idan'))
-      .pipe(
-        map((data: any) => ({ a: data.response }))
-      );
+    const workspace = window.workspace;
+    const parrotService$ = from(workspace.service({ serviceName: 'ParrotService' }));
+    const greetingService$ = from(workspace.service({ serviceName: 'GreetingService' }));
+
+    this.state$ = combineLatest(
+      parrotService$,
+      greetingService$
+    ).pipe(
+      mergeMap((services) => combineLatest(
+        from(services[0].proxy.repeat('Hello Parrot')),
+        from(services[1].proxy.helloToParrot('Stephane')),
+      )),
+      map((responses) => ({
+        parrot: (responses[0] as any).response,
+        greeting: (responses[1] as any).response,
+      }))
+    );
   }
 }

@@ -1,9 +1,10 @@
 import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { StartRequest } from './api/methods/start';
+import { ServicesRequest, ServicesResponse } from './api/methods/services';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
-import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
+import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
 
 interface RegisteredService {
@@ -31,7 +32,7 @@ export class Workspace implements WorkspaceInterface {
       if (this.started) {
         reject('Already started');
       } else {
-
+        this.started = true;
         const services = this.config.services.map(async (service: any) => {
           const { serviceName, displayName, path, options, getInstance } = service;
           return new Promise(async (res, rej) => {
@@ -51,16 +52,16 @@ export class Workspace implements WorkspaceInterface {
         });
 
         Promise.all(services as Array<Promise<Service>>)
-          .then(s => {
-            // console.log('LOAD SUCCESS', s);
+          .then((s) => {
+            console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
-            this.started = true;
 
             // TODO Load  and register components
 
             // Init layout
             const layout = new Layout({ token: this.token, config: this.config.components });
-            layout.render();
+            layout.render()
+              .catch((error: Error) => console.error('Error while rendering layout: ', error.message));
 
             // Init orchestrator
             // const orchestrator = new Orchestrator(this.token);
@@ -73,7 +74,28 @@ export class Workspace implements WorkspaceInterface {
     });
   }
 
-  // TODO change this to serviceS
+  public services(servicesRequest: ServicesRequest): Promise<ServicesResponse> {
+    return new Promise((resolve, reject) => {
+      if (!this.microservice) {
+        return reject('Workspace not started yet');
+      }
+
+      const services = Object.values(this.serviceRegistry)
+        .reduce((services, serviceData) => {
+          return {
+            ...services,
+            [serviceData.displayName]: {
+              serviceName: serviceData.serviceName,
+              displayName: serviceData.displayName,
+              proxy: this.microservice.createProxy({ serviceDefinition: serviceData.definition }),
+            }
+          }
+        }, {});
+
+      resolve(services);
+    });
+  }
+
   public service(serviceRequest: ServiceRequest): Promise<ServiceResponse> {
     return new Promise((resolve, reject) => {
       if (!this.started) {
@@ -85,10 +107,10 @@ export class Workspace implements WorkspaceInterface {
       return !service
         ? reject('Service not found')
         : resolve({
-            serviceName: service.serviceName,
-            displayName: service.displayName,
-            proxy: this.microservice.createProxy({ serviceDefinition: service.definition }),
-          });
+          serviceName: service.serviceName,
+          displayName: service.displayName,
+          proxy: this.microservice.createProxy({ serviceDefinition: service.definition }),
+        });
     });
   }
 

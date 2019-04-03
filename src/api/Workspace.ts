@@ -1,4 +1,5 @@
 import { StartRequest } from './methods/start';
+import { ServicesRequest, ServicesResponse } from './methods/services';
 import { ServiceRequest, ServiceResponse } from './methods/service';
 import { RegisterRequest } from './methods/register';
 
@@ -7,8 +8,10 @@ export interface Workspace {
   // Load the layout and render components inside
   start(startRequest: StartRequest): Promise<void>;
 
-  // Returns proxy of a registered service
-  // Can be used by any service during run time to get a proxy of another service
+  // Returns all the registered services with its proxies included.
+  // Can be rejected, if Workspace has not been started yet
+  services(servicesRequest: ServicesRequest): Promise<ServicesResponse>;
+
   service(serviceRequest: ServiceRequest): Promise<ServiceResponse>;
 
   // Register a service or a component in the workspace

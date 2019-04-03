@@ -1,9 +1,4 @@
-
 import { Workspace } from '../src/Workspace';
-// import { Microservices } from '@scalecube/scalecube-microservice';
-// import { ParrotService } from '../src/services/custom/ParrotService';
-//
-// // import Catalog from './__mocks__/components/Catalog'
 
 const config = {
   name: 'POC',
@@ -72,25 +67,38 @@ const config = {
 
 describe('POC', () => {
 
-  it('...', async () => {
-    expect.assertions(3);
+  it('Calls services methods using proxies', async () => {
+    // expect.assertions(3);
 
     (window as any)['workspace'] = new Workspace({ token: 'abc', config});
     const workspace = (window as any)['workspace'];
 
     await workspace.start().catch((e: any) => console.log(e));
 
-    const parrotService = await workspace.service({ serviceName: 'ParrotService' });
-    const greetingService = await workspace.service({ serviceName: 'GreetingService' });
+    console.log('workspace', workspace);
 
-    await expect(parrotService.proxy.repeat('Say heyyyy'))
-      .resolves.toEqual({ response: 'Say heyyyy', token: 'abc' });
+    try {
+      const services = await workspace.services({});
+      console.log('services', services);
+    } catch (e) {
+      console.log('e', e);
+    }
+    // const services = await workspace.services({});
 
-    await expect(greetingService.proxy.hello())
-      .resolves.toEqual('Hello');
-
-    await expect(greetingService.proxy.helloToParrot('Hey parrot'))
-      .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
+    // console.log('parrotService', services);
+    //
+    // const parrotService = services.Parrot;
+    // const greetingService = services.Greeting;
+    //
+    //
+    // await expect(parrotService.proxy.repeat('Say heyyyy'))
+    //   .resolves.toEqual({ response: 'Say heyyyy', token: 'abc' });
+    //
+    // await expect(greetingService.proxy.hello())
+    //   .resolves.toEqual('Hello');
+    //
+    // await expect(greetingService.proxy.helloToParrot('Hey parrot'))
+    //   .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
   });
 
 });
