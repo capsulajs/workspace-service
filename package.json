@@ -21,6 +21,9 @@
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-syntax-async-generators": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/polyfill": "^7.4.0",
     "@types/jest": "^24.0.6",
     "codacy-coverage": "^3.4.0",
