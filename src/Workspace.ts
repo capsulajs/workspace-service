@@ -3,9 +3,12 @@ import { StartRequest } from './api/methods/start';
 import { ServicesRequest, ServicesResponse } from './api/methods/services';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
+import { RegisterComponentRequest } from './api/methods/registerComponent';
 import { Microservices } from '@scalecube/scalecube-microservice';
 import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
+import Catalog from './webComponents/Catalog';
+import { ComponentsMap } from './api/methods/components';
 
 interface RegisteredService {
   serviceName: string;
@@ -13,9 +16,18 @@ interface RegisteredService {
   definition: any;
 }
 
+const importFake = (path: string): Promise<any> => {
+  const components = {
+    ['../../webComponents/Catalog.tsx']: Catalog
+  };
+
+  return Promise.resolve({ default: components[path] });
+};
+
 export class Workspace implements WorkspaceInterface {
   private readonly token: string;
   private serviceRegistry: { [serviceName: string]: RegisteredService };
+  private componentRegistry: ComponentsMap;
   private config: any;
   private started: boolean;
   private microservice: any;
@@ -24,6 +36,7 @@ export class Workspace implements WorkspaceInterface {
     this.token = args.token;
     this.config = args.config;
     this.serviceRegistry = {};
+    this.componentRegistry = {};
     this.started = false;
   }
 
@@ -52,14 +65,26 @@ export class Workspace implements WorkspaceInterface {
         });
 
         Promise.all(services as Array<Promise<Service>>)
-          .then((s) => {
+          .then(async (s) => {
             console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
 
-            // TODO Load  and register components
+            await Promise.all(this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
+              return importFake(path)
+                .then((module: any) => module.default)
+                .then((WebComponent) => {
+                  customElements.define(name, WebComponent);
+                  const webComponent = new WebComponent();
+                  webComponent.setState();
+                  return this.registerComponent(
+                    { componentName: name, nodeSelector, reference: webComponent }
+                  );
+                });
+            }));
+
 
             // Init layout
-            const layout = new Layout({ token: this.token, config: this.config.components });
+            const layout = new Layout({ token: this.token });
             layout.render()
               .catch((error: Error) => console.error('Error while rendering layout: ', error.message));
 
@@ -125,5 +150,22 @@ export class Workspace implements WorkspaceInterface {
         resolve();
       }
     });
+  }
+
+  public registerComponent(registerComponentRequest: RegisterComponentRequest): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const component = this.componentRegistry[registerComponentRequest.componentName];
+
+      if (!!component) {
+        reject('Component already registered');
+      } else {
+        this.componentRegistry[registerComponentRequest.componentName] = { ...registerComponentRequest };
+        resolve();
+      }
+    });
+  }
+
+  public components(): ComponentsMap {
+    return this.componentRegistry;
   }
 }

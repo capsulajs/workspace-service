@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Observable, from, combineLatest } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
 
@@ -52,11 +52,11 @@ export default class CatalogWithData extends Catalog {
     ).pipe(
       mergeMap((services) => combineLatest(
         from(services[0].proxy.repeat('Hello Parrot')),
-        from(services[1].proxy.helloToParrot('Stephane')),
+        services[1].proxy.helloToCount('Stephane'),
       )),
       map((responses) => ({
         parrot: (responses[0] as any).response,
-        greeting: (responses[1] as any).response,
+        greeting: responses[1],
       }))
     );
   }

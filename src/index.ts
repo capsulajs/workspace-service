@@ -52,6 +52,7 @@ const config = {
           methods: {
             hello: { asyncModel: 'RequestResponse' },
             helloToParrot: { asyncModel: 'RequestResponse' },
+            helloToCount: { asyncModel: 'RequestStream' },
           },
         }
       },

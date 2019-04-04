@@ -1,13 +1,3 @@
-import Catalog from '../../webComponents/Catalog';
-
-const importFake = (path: string): Promise<any> => {
-  const components = {
-    ['../../webComponents/Catalog.tsx']: Catalog
-  };
-
-  return Promise.resolve({ default: components[path] });
-};
-
 /**
  * Layout service is responsible for each component to:
  * - fetch the correct props in relevant services
@@ -17,23 +7,19 @@ const importFake = (path: string): Promise<any> => {
  */
 
 export class Layout {
-  private config: any;
+  private token: string;
 
-  constructor({ token, config }: { token: string, config: object }) {
-    this.config = config;
+  constructor({ token }: { token: string }) {
+    this.token = token;
   }
 
   public render() {
-    return Promise.all(this.config.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
-      return importFake(path)
-        .then((module: any) => module.default)
-        .then((WebComponent) => {
-          customElements.define(name, WebComponent);
-          const webComponent = new WebComponent();
-          webComponent.setState();
-          document.querySelector(nodeSelector)!.appendChild(webComponent);
-        });
-    }));
+    return new Promise((resolve, reject) => {
+      Object.values(window.workspace.components()).forEach(component => {
+        document.querySelector(component.nodeSelector)!.appendChild(component.reference);
+      });
+      resolve();
+    });
   }
 
 }
