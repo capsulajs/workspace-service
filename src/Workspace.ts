@@ -54,7 +54,7 @@ export class Workspace implements WorkspaceInterface {
         Promise.all(services as Array<Promise<Service>>)
           .then(s => {
             // console.log('LOAD SUCCESS', s);
-            this.microservice = Microservices.create({services: s});
+            this.microservice = Microservices.create({ services: s });
             this.started = true;
 
             // TODO Load  and register components

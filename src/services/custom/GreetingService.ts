@@ -7,6 +7,6 @@ export class GreetingService {
   public helloToParrot(helloToParrotRequest: string) {
     return (window as any).workspace.service({ serviceName: 'ParrotService' })
       .then(parrot => parrot.proxy.repeat('Hello' + helloToParrotRequest))
-      .catch(e => new Error(e));
+      .catch(e => { throw new Error(e) });
   }
 }

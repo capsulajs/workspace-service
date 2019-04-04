@@ -21,11 +21,8 @@ export class Orchestrator {
 
             envRegistry
               .environments$({})
-              .pipe(
-                toArray(),
-                tap((envs: any) => envSelector.input({ data: from([envs]) })),
-              )
-              .subscribe();
+              .pipe(toArray())
+              .subscribe((envs: any) => envSelector.input({ data: from([envs]) }));
           },
         },
         {
@@ -38,21 +35,17 @@ export class Orchestrator {
 
             envSelector
               .selected$({})
-              .pipe(
-                // tap(console.log),
-                tap((item: any) => {
-                  if (item && !isEmpty(item)) {
-                    const methods: any = []; // define interface
-                    item.env.services.forEach(service => {
-                      Object.keys(service.methods).forEach(key => {
-                        methods.push({ serviceName: service.serviceName, methodName: key });
-                      });
+              .subscribe((item: any) => {
+                if (item && !isEmpty(item)) {
+                  const methods: any = []; // define interface
+                  item.env.services.forEach(service => {
+                    Object.keys(service.methods).forEach(key => {
+                      methods.push({ serviceName: service.serviceName, methodName: key });
                     });
-                    methodSelector.input({ data: from([methods])});
-                  }
-                })
-              )
-              .subscribe();
+                  });
+                  methodSelector.input({ data: from([methods])});
+                }
+              });
           },
         },
       ],
@@ -60,6 +53,6 @@ export class Orchestrator {
   }
 
   public init() {
-    this.config.flows.forEach((flow: any) => flow.flow());
+    this.config.flows.forEach((configFlow: any) => configFlow.flow());
   }
 }
