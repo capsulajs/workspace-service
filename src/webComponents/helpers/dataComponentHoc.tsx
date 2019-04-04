@@ -12,7 +12,7 @@ export const dataComponentHoc = (Component: any, data$: any) => {
     public componentDidMount() {
       data$.subscribe((data) => {
         // @ts-ignore
-        console.log('$data emits', data);
+        // console.log('$data emits', data);
         this.setState(data)
       })
     }

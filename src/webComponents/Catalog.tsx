@@ -37,7 +37,7 @@ export default class Catalog extends HTMLElement {
             map((n: number) => ({ a: `Hello ${n}`, b: `World ${n}` }))
           );
         const ComponentWithData = dataComponentHoc(UICatalog, data$);
-        console.log('ComponentWithData', ComponentWithData);
+        // console.log('ComponentWithData', ComponentWithData);
         ReactDOM.render(<ComponentWithData />, this.root.getElementById(mountPoint);
     }
 }

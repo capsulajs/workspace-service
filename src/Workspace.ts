@@ -3,8 +3,9 @@ import { StartRequest } from './api/methods/start';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
-import { Service } from '@scalecube/scalecube-microservice/lib/src/api/public';
-import { Layout } from './services/core/Layout';
+import Service from '@scalecube/scalecube-microservice/lib/api/Service';
+// import { Layout } from './services/core/Layout';
+import { Orchestrator } from './services/core/Orchestrator';
 
 interface RegisteredService {
   serviceName: string;
@@ -59,12 +60,12 @@ export class Workspace implements WorkspaceInterface {
             // TODO Load  and register components
 
             // Init layout
-            const layout = new Layout(this.token);
-            layout.render();
+            // const layout = new Layout(this.token);
+            // layout.render();
 
             // Init orchestrator
-            // const orchestrator = new Orchestrator(this.token);
-            // orchestrator.init();
+            const orchestrator = new Orchestrator(this.token);
+            orchestrator.init();
 
             resolve();
           })
@@ -81,10 +82,10 @@ export class Workspace implements WorkspaceInterface {
       }
 
       const service = this.serviceRegistry[serviceRequest.serviceName];
-      console.log('registry', this.serviceRegistry);
+      // console.log('registry', this.serviceRegistry);
 
       return !service
-        ? reject('Service not found')
+        ? reject(`Service not found: ${serviceRequest.serviceName}`)
         : resolve({
             serviceName: service.serviceName,
             displayName: service.displayName,

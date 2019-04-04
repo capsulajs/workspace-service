@@ -1,7 +1,11 @@
+import { toArray, tap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import isEmpty from 'lodash/isEmpty';
+
 /**
  *  Orchestrator service is responsible for creating flow between workspace services
  */
-class Orchestrator {
+export class Orchestrator {
   private config: any;
 
   constructor(token: string) {
@@ -11,36 +15,44 @@ class Orchestrator {
           name: 'setEnvironments',
           id: '1',
           flow: async () => {
-            const workspace = (window as any)['workspace'];
-            const envRegistry = (await workspace.service('EnvRegistry')).proxy;
-            const envSelector = (await workspace.service('EnvSelector')).proxy;
+            const workspace = (window as any).workspace;
+            const envRegistry = (await workspace.service({ serviceName: 'EnvRegistryService' })).proxy;
+            const envSelector = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
 
             envRegistry
               .environments$({})
-              .toArray()
-              .do((envs: any) => envSelector.input({ data: envs }))
-              .subscribe();
+              .pipe(toArray())
+              .subscribe((envs: any) => envSelector.input({ data: from([envs]) }));
           },
         },
         {
           name: 'setMethods',
           id: '2',
           flow: async () => {
-            const workspace = (window as any)['workspace'];
-            const envSelector = (await workspace.service('EnvSelector')).proxy;
-            const methodSelector = (await workspace.service('MethodSelector')).proxy;
+            const workspace = (window as any).workspace;
+            const envSelector = (await workspace.service({ serviceName: 'EnvSelectorService'})).proxy;
+            const methodSelector = (await workspace.service({ serviceName: 'MethodSelectorService'})).proxy;
 
             envSelector
-              .selected({})
-              .do((env: any) => methodSelector.input(env.methods))
-              .subscribe();
+              .selected$({})
+              .subscribe((item: any) => {
+                if (item && !isEmpty(item)) {
+                  const methods: any = []; // define interface
+                  item.env.services.forEach(service => {
+                    Object.keys(service.methods).forEach(key => {
+                      methods.push({ serviceName: service.serviceName, methodName: key });
+                    });
+                  });
+                  methodSelector.input({ data: from([methods])});
+                }
+              });
           },
         },
       ],
     };
   }
 
-  public async init() {
-    this.config.flows.forEach((flow: any) => flow.flow());
+  public init() {
+    this.config.flows.forEach((configFlow: any) => configFlow.flow());
   }
 }
