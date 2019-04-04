@@ -67,7 +67,7 @@ export class Layout {
         customElements.define('web-catalog', Catalog);
         const webComponentEl = document.createElement('web-catalog');
 
-        console.log('webComponentEl', webComponentEl);
+        // console.log('webComponentEl', webComponentEl);
 
         document.getElementById('root')!.appendChild(webComponentEl);
         resolve();

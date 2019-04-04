@@ -96,10 +96,10 @@ describe('POC', () => {
   it('...', async (done) => {
     expect.assertions(4);
 
-    (window as any)['workspace'] = new Workspace({ token: 'abc', config});
-    const workspace = (window as any)['workspace'];
+    (window as any).workspace = new Workspace({ token: 'abc', config});
+    const workspace = (window as any).workspace;
 
-    await workspace.start().catch((e: any) => console.log(e));
+    await workspace.start().catch((e: any) => new Error(e));
 
     // const envRegistryService = (await workspace.service({ serviceName: 'EnvRegistryService' })).proxy;
     const envSelectorService = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
@@ -262,7 +262,6 @@ describe('POC', () => {
 
     let counter = 0;
     methodSelectorService.output$({}).subscribe((item) => {
-      console.log(counter, item);
       switch (counter) {
         case 0: expect(item).toEqual([]);
           break;

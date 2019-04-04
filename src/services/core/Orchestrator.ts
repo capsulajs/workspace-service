@@ -15,7 +15,7 @@ export class Orchestrator {
           name: 'setEnvironments',
           id: '1',
           flow: async () => {
-            const workspace = (window as any)['workspace'];
+            const workspace = (window as any).workspace;
             const envRegistry = (await workspace.service({ serviceName: 'EnvRegistryService' })).proxy;
             const envSelector = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
 
@@ -32,7 +32,7 @@ export class Orchestrator {
           name: 'setMethods',
           id: '2',
           flow: async () => {
-            const workspace = (window as any)['workspace'];
+            const workspace = (window as any).workspace;
             const envSelector = (await workspace.service({ serviceName: 'EnvSelectorService'})).proxy;
             const methodSelector = (await workspace.service({ serviceName: 'MethodSelectorService'})).proxy;
 

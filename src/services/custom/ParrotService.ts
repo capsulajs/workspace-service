@@ -1,6 +1,6 @@
 // Service that require token, register itself and expose repeat method
 export class ParrotService {
-  token: string;
+  public token: string;
 
   constructor(token: string) {
     this.token = token;
