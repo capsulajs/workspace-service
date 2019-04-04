@@ -6,16 +6,19 @@ import { RegisterComponentRequest } from './methods/registerComponent';
 import { ComponentsMap } from './methods/components';
 
 export interface Workspace {
-  // Load all the services from path
-  // Load the layout and render components inside
+  // Loads all the services from path
+  // Loads the layout and renders components inside
   start(startRequest: StartRequest): Promise<void>;
 
   // Returns all the registered services with its proxies included.
   // Can be rejected, if Workspace has not been started yet
   services(servicesRequest: ServicesRequest): Promise<ServicesResponse>;
 
+  // Returns the required service with its proxy included.
+  // Can be rejected, if Workspace has not been started yet
   service(serviceRequest: ServiceRequest): Promise<ServiceResponse>;
 
+  // Returns all the registered components
   components(): ComponentsMap;
 
   // Register a service in the workspace
