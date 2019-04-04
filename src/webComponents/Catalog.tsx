@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as React from 'react';
 import { Observable, from, combineLatest } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
@@ -50,7 +50,7 @@ export default class CatalogWithData extends Catalog {
       parrotService$,
       greetingService$
     ).pipe(
-      mergeMap((services) => combineLatest(
+      mergeMap((services: Array<any>) => combineLatest(
         from(services[0].proxy.repeat('Hello Parrot')),
         from(services[1].proxy.helloToParrot('Stephane')),
       )),
