@@ -14,45 +14,62 @@ const config = {
   name: 'POC',
   services: [
     {
-      serviceName: 'ParrotService',
-      displayName: 'Parrot',
-      path: './services/custom/ParrotService',
-      getInstance: (path: string, token: string) => {
-        return new Promise((resolve) => {
-          resolve(new ParrotService(token));
+      serviceName: 'EnvSelectorService',
+      displayName: 'EnvSelector',
+      path: '../src/services/custom/Selector',
+      getInstance: (path: string) => {
+        return import(path).then((module: any) => {
+          return new module.Selector();
         });
-        // return import(path).then((module: any) => {
-        //   return new module.ParrotService(token);
-        // });
       },
       options: {
         definition: {
-          serviceName: 'ParrotService',
+          serviceName: 'EnvSelectorService',
           methods: {
-            repeat: { asyncModel: 'RequestResponse' },
+            input: { asyncModel: 'RequestResponse' },
+            output$: { asyncModel: 'RequestStream' },
+            select: { asyncModel: 'RequestResponse' },
+            selected$: { asyncModel: 'RequestStream' }
           },
         },
       },
     },
     {
-      serviceName: 'GreetingService',
-      displayName: 'Greeting',
-      path: './services/custom/GreetingService',
-      getInstance: (path: string, token: string) => {
-        return new Promise((resolve) => {
-          resolve(new GreetingService());
+      serviceName: 'MethodSelectorService',
+      displayName: 'MethodSelector',
+      path: '../src/services/custom/Selector',
+      getInstance: (path: string) => {
+        return import(path).then((module: any) => {
+          return new module.Selector();
         });
-        // return import(path).then((module: any) => {
-        //   return new module.GreetingService(token);
-        // });
       },
       options: {
         definition: {
-          serviceName: 'GreetingService',
+          serviceName: 'MethodSelectorService',
           methods: {
-            hello: { asyncModel: 'RequestResponse' },
-            helloToParrot: { asyncModel: 'RequestResponse' },
-            helloToCount: { asyncModel: 'RequestStream' },
+            input: { asyncModel: 'RequestResponse' },
+            output$: { asyncModel: 'RequestStream' },
+            select: { asyncModel: 'RequestResponse' },
+            selected$: { asyncModel: 'RequestStream' }
+          },
+        },
+      },
+    },
+    {
+      serviceName: 'EnvRegistryService',
+      displayName: 'EnvRegistry',
+      path: '../src/_custom_node_modules_/environment-registry/lib',
+      getInstance: (path: string, token: string) => {
+        return import(path).then((module: any) => {
+          return new module.EnvRegistry(token);
+        });
+      },
+      options: {
+        definition: {
+          serviceName: 'EnvRegistryService',
+          methods: {
+            register: { asyncModel: 'RequestResponse' },
+            environments$: { asyncModel: 'RequestStream' },
           },
         }
       },

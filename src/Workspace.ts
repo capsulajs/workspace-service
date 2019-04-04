@@ -5,6 +5,8 @@ import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { RegisterComponentRequest } from './api/methods/registerComponent';
 import { Microservices } from '@scalecube/scalecube-microservice';
+// import { Layout } from './services/core/Layout';
+import { Orchestrator } from './services/core/Orchestrator';
 import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
 import Catalog from './webComponents/Catalog';
@@ -89,8 +91,8 @@ export class Workspace implements WorkspaceInterface {
               .catch((error: Error) => console.error('Error while rendering layout: ', error.message));
 
             // Init orchestrator
-            // const orchestrator = new Orchestrator(this.token);
-            // orchestrator.init();
+            const orchestrator = new Orchestrator(this.token);
+            orchestrator.init();
 
             resolve();
           })
@@ -130,7 +132,7 @@ export class Workspace implements WorkspaceInterface {
       const service = this.serviceRegistry[serviceRequest.serviceName];
 
       return !service
-        ? reject('Service not found')
+        ? reject(`Service not found: ${serviceRequest.serviceName}`)
         : resolve({
           serviceName: service.serviceName,
           displayName: service.displayName,
