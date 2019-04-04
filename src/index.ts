@@ -1,4 +1,8 @@
+import 'babel-polyfill';
+// Use regular imports till dynamic imports issue is resolved
 import { Workspace } from './Workspace';
+import { Selector } from './services/custom/Selector'
+import { EnvRegistry } from './_custom_node_modules_/environment-registry/lib'
 
 const config = {
   name: 'POC',
@@ -8,9 +12,10 @@ const config = {
       displayName: 'EnvSelector',
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
-        return import(path).then((module: any) => {
-          return new module.Selector();
-        });
+        return Promise.resolve(new Selector());
+        // return import(path).then((module: any) => {
+        //   return new module.Selector();
+        // });
       },
       options: {
         definition: {
@@ -29,9 +34,10 @@ const config = {
       displayName: 'MethodSelector',
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
-        return import(path).then((module: any) => {
-          return new module.Selector();
-        });
+        return Promise.resolve(new Selector());
+        // return import(path).then((module: any) => {
+        //   return new module.Selector();
+        // });
       },
       options: {
         definition: {
@@ -50,9 +56,10 @@ const config = {
       displayName: 'EnvRegistry',
       path: '../src/_custom_node_modules_/environment-registry/lib',
       getInstance: (path: string, token: string) => {
-        return import(path).then((module: any) => {
-          return new module.EnvRegistry(token);
-        });
+        return Promise.resolve(new EnvRegistry(token));
+        // return import(path).then((module: any) => {
+        //   return new module.EnvRegistry(token);
+        // });
       },
       options: {
         definition: {
