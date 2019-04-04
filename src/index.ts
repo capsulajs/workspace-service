@@ -93,7 +93,7 @@ const config = {
   ]
 };
 
-(window as any).workspace = new Workspace({ token: 'abc', config});
+(window as any).workspace = new Workspace({ token: 'localhost:1234', config });
 const workspace = (window as any).workspace;
 
-workspace.start();
+workspace.start().catch((e: any) => { throw new Error(e)});
