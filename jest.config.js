@@ -7,9 +7,6 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   moduleDirectories: ['src', 'node_modules'],
   testEnvironment: 'jsdom',
-  globals: {
-    window: {},
-    document: {},
-    HTMLElement: {}
-  },
+  setupFilesAfterEnv: ['./tests/setup.ts'],
+  globals: {},
 };

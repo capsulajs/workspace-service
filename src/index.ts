@@ -2,8 +2,7 @@ import 'babel-polyfill';
 import { Workspace } from './Workspace';
 import { envRegistry } from './mocks/envRegistry';
 import { workspaceConfig } from './mocks/workspaceConfig';
-
-const token = 'localhost:1234';
+import { token } from './const';
 
 localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry));
 
