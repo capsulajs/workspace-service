@@ -2,7 +2,12 @@ import 'babel-polyfill';
 // Use regular imports till dynamic imports issue is resolved
 import { Workspace } from './Workspace';
 import { Selector } from './services/custom/Selector'
-import { EnvRegistry } from './_custom_node_modules_/environment-registry/lib'
+import { EnvRegistry } from '@capsulajs/environment-registry'
+import { envRegistry } from './envRegistry';
+
+const token = 'localhost:1234';
+
+localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry));
 
 const config = {
   name: 'POC',
@@ -54,7 +59,7 @@ const config = {
     {
       serviceName: 'EnvRegistryService',
       displayName: 'EnvRegistry',
-      path: '../src/_custom_node_modules_/environment-registry/lib',
+      path: '@capsulajs/environment-registry',
       getInstance: (path: string, token: string) => {
         return Promise.resolve(new EnvRegistry(token));
         // return import(path).then((module: any) => {
@@ -93,7 +98,7 @@ const config = {
   ]
 };
 
-(window as any).workspace = new Workspace({ token: 'localhost:1234', config });
+(window as any).workspace = new Workspace({ token, config });
 const workspace = (window as any).workspace;
 
 workspace.start().catch((e: any) => { throw new Error(e)});
