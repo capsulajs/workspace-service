@@ -4,7 +4,7 @@ import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { Microservices } from '@scalecube/scalecube-microservice';
 import Service from '@scalecube/scalecube-microservice/lib/api/Service';
-// import { Layout } from './services/core/Layout';
+import { Layout } from './services/core/Layout';
 import { Orchestrator } from './services/core/Orchestrator';
 
 interface RegisteredService {
@@ -60,8 +60,8 @@ export class Workspace implements WorkspaceInterface {
             // TODO Load  and register components
 
             // Init layout
-            // const layout = new Layout(this.token);
-            // layout.render();
+            const layout = new Layout(this.token);
+            layout.render();
 
             // Init orchestrator
             const orchestrator = new Orchestrator(this.token);

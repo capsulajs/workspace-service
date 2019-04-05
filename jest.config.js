@@ -6,10 +6,7 @@ module.exports = {
   testRegex: '.*\\.test\\.ts$',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   moduleDirectories: ['src', 'node_modules'],
-  testEnvironment: 'node',
-  globals: {
-    window: {},
-    document: {},
-    HTMLElement: {}
-  },
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['./tests/setup.ts'],
+  globals: {},
 };

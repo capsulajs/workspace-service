@@ -15,16 +15,21 @@ const UICatalog = (props) => {
 
 const mountPoint = 'uc-catalog';
 const template = document.createElement('template');
-template.innerHTML = `<div id="${mountPoint}"></div>`
+const content = `<div id="${mountPoint}"></div>`;
+template.innerHTML = content;
 
 export default class Catalog extends HTMLElement {
     // private config: any;
-    private root: any;
+    private root?: any;
 
     constructor() {
         super();
-        this.root = this.attachShadow({ mode: 'open' });
-        this.root.appendChild(template.content.cloneNode(true));
+        if (this.attachShadow) {
+            this.root = this.attachShadow({ mode: 'open' });
+            this.root.appendChild(template.content.cloneNode(true));
+        } else {
+            this.innerHTML = content;
+        }
 
         // TODO this config should come from workspace
         // this.config = {
@@ -37,7 +42,6 @@ export default class Catalog extends HTMLElement {
             map((n: number) => ({ a: `Hello ${n}`, b: `World ${n}` }))
           );
         const ComponentWithData = dataComponentHoc(UICatalog, data$);
-        // console.log('ComponentWithData', ComponentWithData);
-        ReactDOM.render(<ComponentWithData />, this.root.getElementById(mountPoint);
+        ReactDOM.render(<ComponentWithData />, (this.root || this).getElementById(mountPoint));
     }
 }

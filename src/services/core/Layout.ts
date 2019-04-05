@@ -64,7 +64,7 @@ export class Layout {
   public render() {
     return Promise.all(this.config.components.map(({ name, nodeSelector, path }) => {
       return new Promise((resolve) => {
-        customElements.define('web-catalog', Catalog);
+        window.customElements.define('web-catalog', Catalog);
         const webComponentEl = document.createElement('web-catalog');
 
         // console.log('webComponentEl', webComponentEl);
