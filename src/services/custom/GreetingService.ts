@@ -16,7 +16,7 @@ export class GreetingService {
   public helloToCount(name: string) {
     return interval(1000)
       .pipe(
-        map((number: number) => `Hello ${name} times ${number}`)
+        map((num: number) => `Hello ${name} times ${num}`)
       );
   }
 }

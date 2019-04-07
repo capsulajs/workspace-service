@@ -1,19 +1,52 @@
-import '@babel/polyfill'
-import { Workspace } from './Workspace';
-import { Workspace as WorkspaceInterface } from './api/Workspace';
-import { envRegistry } from './mocks/envRegistry';
-import { token } from './const';
-import { Selector } from './services/custom/Selector';
+// Use regular imports until dynamic imports issue is resolved
+import { Selector } from '../services/custom/Selector';
+import { ParrotService } from '../services/custom/ParrotService';
+import { GreetingService } from '../services/custom/GreetingService';
 import { EnvRegistry } from '@capsulajs/environment-registry';
+import { token } from '../const';
 
-declare global {
-  interface Window {
-    workspace: WorkspaceInterface;
-  }
-}
-const config = {
+export const workspaceConfig = {
   name: 'POC',
   services: [
+    {
+      serviceName: 'ParrotService',
+      displayName: 'Parrot',
+      path: '../services/custom/ParrotService',
+      getInstance: (path: string) => {
+        return Promise.resolve(new ParrotService(token));
+        // return import(path).then((module: any) => {
+        //   return new module.Selector();
+        // });
+      },
+      options: {
+        definition: {
+          serviceName: 'ParrotService',
+          methods: {
+            repeat: { asyncModel: 'RequestResponse' },
+          },
+        },
+      },
+    },
+    {
+      serviceName: 'GreetingService',
+      displayName: 'Greeting',
+      path: '../services/custom/GreetingService',
+      getInstance: (path: string) => {
+        return Promise.resolve(new GreetingService());
+        // return import(path).then((module: any) => {
+        //   return new module.Selector();
+        // });
+      },
+      options: {
+        definition: {
+          serviceName: 'GreetingService',
+          methods: {
+            hello: { asyncModel: 'RequestResponse' },
+            helloToParrot: { asyncModel: 'RequestResponse' }
+          }
+        },
+      },
+    },
     {
       serviceName: 'EnvSelectorService',
       displayName: 'EnvSelector',
@@ -61,7 +94,7 @@ const config = {
     {
       serviceName: 'EnvRegistryService',
       displayName: 'EnvRegistry',
-      path: '../src/_custom_node_modules_/environment-registry/lib',
+      path: '@capsulajs/environment-registry',
       getInstance: (path: string, instanceToken: string) => {
         return Promise.resolve(new EnvRegistry(instanceToken));
         // return import(path).then((module: any) => {
@@ -79,27 +112,23 @@ const config = {
       },
     },
   ],
-  components: {
-    componentsBeforeLoad: [
-      {
-        name: 'web-grid',
-        nodeSelector: '#grid',
-        path: '../../webComponents/Grid.tsx'
-      }
-    ],
-    componentsAfterLoad: [
-      {
-        name: 'web-catalog',
-        nodeSelector: '#grid #catalog',
-        path: '../../webComponents/Catalog.tsx'
-      }
-    ]
-  }
+  components: [
+    // {
+    //   name: 'CatalogComponent',
+    //   displayName: 'Catalog',
+    //   path: '../src/services/custom/CatalogComponent',
+    //   options: {
+    //     import: (path: string) => {
+    //       return import(path).then((module: any) => {
+    //         return module.Catalog;
+    //       })
+    //     },
+    //     render: (Component: any, props: any, domSelector: string) => {},
+    //     definition: {
+    //       name: 'CatalogComponent',
+    //       props: {},
+    //     },
+    //   },
+    // },
+  ]
 };
-
-localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry));
-
-(window as any).workspace = new Workspace({ token, config });
-const workspace = (window as any).workspace;
-
-workspace.start({ token }).catch((e: any) => { throw new Error(e)});

@@ -50,7 +50,7 @@ export default class CatalogWithData extends Catalog {
       parrotService$,
       greetingService$
     ).pipe(
-      mergeMap((services: Array<any>) => combineLatest(
+      mergeMap((services: any[]) => combineLatest(
         from(services[0].proxy.repeat('Hello Parrot')),
         services[1].proxy.helloToCount('Stephane'),
       )),

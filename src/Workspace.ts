@@ -5,7 +5,6 @@ import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { RegisterComponentRequest } from './api/methods/registerComponent';
 import { Microservices } from '@scalecube/scalecube-microservice';
-// import { Layout } from './services/core/Layout';
 import { Orchestrator } from './services/core/Orchestrator';
 import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
@@ -28,8 +27,8 @@ const importFake = (path: string): Promise<any> => {
 
 export class Workspace implements WorkspaceInterface {
   private readonly token: string;
-  private serviceRegistry: { [serviceName: string]: RegisteredService };
-  private componentRegistry: ComponentsMap;
+  private readonly serviceRegistry: { [serviceName: string]: RegisteredService };
+  private readonly componentRegistry: ComponentsMap;
   private config: any;
   private started: boolean;
   private microservice: any;
@@ -68,7 +67,7 @@ export class Workspace implements WorkspaceInterface {
 
         Promise.all(services as Array<Promise<Service>>)
           .then(async (s) => {
-            console.log('LOAD SUCCESS', s);
+            // console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
 
             await Promise.all(this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
@@ -88,7 +87,7 @@ export class Workspace implements WorkspaceInterface {
             // Init layout
             const layout = new Layout({ token: this.token });
             layout.render()
-              .catch((error: Error) => console.error('Error while rendering layout: ', error.message));
+              .catch((error: Error) => { throw new Error(`Error while rendering layout: ${error.message}`) });
 
             // Init orchestrator
             const orchestrator = new Orchestrator(this.token);
@@ -108,9 +107,9 @@ export class Workspace implements WorkspaceInterface {
       }
 
       const services = Object.values(this.serviceRegistry)
-        .reduce((services, serviceData) => {
+        .reduce((service, serviceData) => {
           return {
-            ...services,
+            ...service,
             [serviceData.displayName]: {
               serviceName: serviceData.serviceName,
               displayName: serviceData.displayName,

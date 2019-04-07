@@ -12,6 +12,7 @@ install:
 
 script:
   - yarn lint
+  - yarn test
 
 notifications:
   email:
