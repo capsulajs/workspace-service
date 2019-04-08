@@ -102,4 +102,4 @@ localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry)
 (window as any).workspace = new Workspace({ token, config });
 const workspace = (window as any).workspace;
 
-workspace.start({ token }).catch((e: any) => { throw new Error(e)});
+workspace.start({ token });
