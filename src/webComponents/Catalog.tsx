@@ -43,6 +43,6 @@ export default class CatalogWithData extends Catalog {
   private async setState() {
     const workspace = window.workspace;
     const service = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
-    this.state$ = service.output$({}))
+    this.state$ = service.output$({});
   }
 }
