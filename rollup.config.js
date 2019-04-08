@@ -9,7 +9,7 @@ export default {
   input: 'src/webComponents/Catalog.tsx',
   output: {
     file: 'bundle.js',
-    format: 'es',
+    format: 'esm',
     name: 'Catalog',
     globals: {
       react: 'React'
