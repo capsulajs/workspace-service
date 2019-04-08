@@ -14,8 +14,7 @@ declare global {
 const UICatalog = (props) => {
   return (
     <div id="ui-catalog-component">
-      <p>Parrot: {props.parrot}</p>
-      <p>Greeting: {props.greeting}</p>
+      <p>OUTPUT: {JSON.stringify(props)}</p>
     </div>
   );
 };
@@ -41,23 +40,9 @@ class Catalog extends HTMLElement {
 }
 
 export default class CatalogWithData extends Catalog {
-  private setState() {
+  private async setState() {
     const workspace = window.workspace;
-    const parrotService$ = from(workspace.service({ serviceName: 'ParrotService' }));
-    const greetingService$ = from(workspace.service({ serviceName: 'GreetingService' }));
-
-    this.state$ = combineLatest(
-      parrotService$,
-      greetingService$
-    ).pipe(
-      mergeMap((services: any[]) => combineLatest(
-        from(services[0].proxy.repeat('Hello Parrot')),
-        services[1].proxy.helloToCount('Stephane'),
-      )),
-      map((responses) => ({
-        parrot: (responses[0] as any).response,
-        greeting: responses[1],
-      }))
-    );
+    const service = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
+    this.state$ = service.output$({}))
   }
 }
