@@ -14,7 +14,14 @@ declare global {
 const UICatalog = (props) => {
   return (
     <div id="ui-catalog-component">
-      <p>OUTPUT: {JSON.stringify(props, null, 4)}</p>
+      <p>OUTPUT:</p>
+      <div>
+        {Object.keys(props).map(key => (
+          <div key={key} style={{padding: 20}}>
+            <div>ENV[{key}]: {JSON.stringify(props[key], null, 4)}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -44,7 +51,7 @@ export default class CatalogWithData extends Catalog {
     const workspace = window.workspace;
     const service = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
     this.state$ = service.output$({}).pipe(
-      map((envs) => envs.reduce((acc, curr) => ({ ...acc, [curr.envKey]: curr.env }) ,{}))
+      map((envs) => envs.reduce((acc, curr) => ({ ...acc, [curr.envKey]: curr.env.services }) ,{}))
     );
   }
 }
