@@ -71,11 +71,10 @@ import { token } from '../src/const';
 localStorage.setItem(`localhost:1234.environmentRegistry`, JSON.stringify(envRegistry));
 
 describe('POC', () => {
-
   it('Calls services methods using proxies', async () => {
     // expect.assertions(3);
 
-    (window as any)['workspace'] = new Workspace({ token: 'abc', config: workspaceConfig});
+    (window as any)['workspace'] = new Workspace({ token: 'abc', config: workspaceConfig });
     const workspace = (window as any)['workspace'];
 
     await workspace.start().catch((e: any) => console.log(e));
@@ -105,6 +104,4 @@ describe('POC', () => {
     // await expect(greetingService.proxy.helloToParrot('Hey parrot'))
     //   .resolves.toEqual({ response: 'HelloHey parrot', token: 'abc' });
   });
-
 });
-

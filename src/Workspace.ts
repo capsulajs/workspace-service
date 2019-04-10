@@ -19,7 +19,7 @@ interface RegisteredService {
 
 const importFake = (path: string): Promise<any> => {
   const components = {
-    ['../../webComponents/Catalog.tsx']: Catalog
+    ['../../webComponents/Catalog.tsx']: Catalog,
   };
 
   return Promise.resolve({ default: components[path] });
@@ -62,32 +62,31 @@ export class Workspace implements WorkspaceInterface {
             });
 
             res({ definition: options.definition, reference: instance });
-          })
+          });
         });
 
         Promise.all(services as Array<Promise<Service>>)
           .then(async (s) => {
-            // console.log('LOAD SUCCESS', s);
             this.microservice = Microservices.create({ services: s });
 
-            await Promise.all(this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
-              return importFake(path)
-                .then((module: any) => module.default)
-                .then((WebComponent) => {
-                  customElements.define(name, WebComponent);
-                  const webComponent = new WebComponent();
-                  webComponent.setState();
-                  return this.registerComponent(
-                    { componentName: name, nodeSelector, reference: webComponent }
-                  );
-                });
-            }));
-
+            await Promise.all(
+              this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
+                return importFake(path)
+                  .then((module: any) => module.default)
+                  .then((WebComponent) => {
+                    customElements.define(name, WebComponent);
+                    const webComponent = new WebComponent();
+                    webComponent.setState();
+                    return this.registerComponent({ componentName: name, nodeSelector, reference: webComponent });
+                  });
+              })
+            );
 
             // Init layout
             const layout = new Layout({ token: this.token });
-            layout.render()
-              .catch((error: Error) => { throw new Error(`Error while rendering layout: ${error.message}`) });
+            layout.render().catch((error: Error) => {
+              throw new Error(`Error while rendering layout: ${error.message}`);
+            });
 
             // Init orchestrator
             const orchestrator = new Orchestrator(this.token);
@@ -106,17 +105,16 @@ export class Workspace implements WorkspaceInterface {
         return reject('Workspace not started yet');
       }
 
-      const services = Object.values(this.serviceRegistry)
-        .reduce((service, serviceData) => {
-          return {
-            ...service,
-            [serviceData.displayName]: {
-              serviceName: serviceData.serviceName,
-              displayName: serviceData.displayName,
-              proxy: this.microservice.createProxy({ serviceDefinition: serviceData.definition }),
-            }
-          }
-        }, {});
+      const services = Object.values(this.serviceRegistry).reduce((service, serviceData) => {
+        return {
+          ...service,
+          [serviceData.displayName]: {
+            serviceName: serviceData.serviceName,
+            displayName: serviceData.displayName,
+            proxy: this.microservice.createProxy({ serviceDefinition: serviceData.definition }),
+          },
+        };
+      }, {});
 
       resolve(services);
     });
@@ -133,10 +131,10 @@ export class Workspace implements WorkspaceInterface {
       return !service
         ? reject(`Service not found: ${serviceRequest.serviceName}`)
         : resolve({
-          serviceName: service.serviceName,
-          displayName: service.displayName,
-          proxy: this.microservice.createProxy({ serviceDefinition: service.definition }),
-        });
+            serviceName: service.serviceName,
+            displayName: service.displayName,
+            proxy: this.microservice.createProxy({ serviceDefinition: service.definition }),
+          });
     });
   }
 

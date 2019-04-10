@@ -1,4 +1,4 @@
-import '@babel/polyfill'
+import '@babel/polyfill';
 import { Workspace } from './Workspace';
 import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { envRegistry } from './mocks/envRegistry';
@@ -31,7 +31,7 @@ const config = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -53,7 +53,7 @@ const config = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -75,7 +75,7 @@ const config = {
             register: { asyncModel: 'RequestResponse' },
             environments$: { asyncModel: 'RequestStream' },
           },
-        }
+        },
       },
     },
   ],
@@ -84,17 +84,17 @@ const config = {
       {
         name: 'web-grid',
         nodeSelector: '#grid',
-        path: '../../webComponents/Grid.tsx'
-      }
+        path: '../../webComponents/Grid.tsx',
+      },
     ],
     componentsAfterLoad: [
       {
         name: 'web-catalog',
         nodeSelector: '#grid #catalog',
-        path: '../../webComponents/Catalog.tsx'
-      }
-    ]
-  }
+        path: '../../webComponents/Catalog.tsx',
+      },
+    ],
+  },
 };
 
 localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry));
@@ -102,4 +102,6 @@ localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry)
 (window as any).workspace = new Workspace({ token, config });
 const workspace = (window as any).workspace;
 
-workspace.start({ token }).catch(error => {throw new Error(error)});
+workspace.start({ token }).catch((error) => {
+  throw new Error(error);
+});

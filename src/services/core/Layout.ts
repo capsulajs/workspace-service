@@ -15,11 +15,10 @@ export class Layout {
 
   public render() {
     return new Promise((resolve, reject) => {
-      Object.values(window.workspace.components()).forEach(component => {
+      Object.values(window.workspace.components()).forEach((component) => {
         document.querySelector(component.nodeSelector)!.appendChild(component.reference);
       });
       resolve();
     });
   }
-
 }

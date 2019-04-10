@@ -42,8 +42,8 @@ export const workspaceConfig = {
           serviceName: 'GreetingService',
           methods: {
             hello: { asyncModel: 'RequestResponse' },
-            helloToParrot: { asyncModel: 'RequestResponse' }
-          }
+            helloToParrot: { asyncModel: 'RequestResponse' },
+          },
         },
       },
     },
@@ -64,7 +64,7 @@ export const workspaceConfig = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -86,7 +86,7 @@ export const workspaceConfig = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -108,7 +108,7 @@ export const workspaceConfig = {
             register: { asyncModel: 'RequestResponse' },
             environments$: { asyncModel: 'RequestStream' },
           },
-        }
+        },
       },
     },
   ],
@@ -130,5 +130,5 @@ export const workspaceConfig = {
     //     },
     //   },
     // },
-  ]
+  ],
 };

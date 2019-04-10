@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from 'react';
 
 export const dataComponentHoc = (Component: any, data$: any) => {
   return class HOC extends React.Component {
@@ -6,19 +6,22 @@ export const dataComponentHoc = (Component: any, data$: any) => {
 
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = undefined;
     }
 
     public componentDidMount() {
       data$.subscribe((data) => {
         // @ts-ignore
-        this.setState(data)
-      })
+        this.setState(data);
+      });
     }
 
     public render() {
+      if (!this.state) {
+        return null;
+      }
       // @ts-ignore
       return <Component {...this.state} />;
     }
-  }
-}
+  };
+};

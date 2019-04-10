@@ -8,15 +8,15 @@ export class GreetingService {
   }
 
   public helloToParrot(helloToParrotRequest: string) {
-    return (window as any).workspace.service({ serviceName: 'ParrotService' })
-      .then(parrot => parrot.proxy.repeat('Hello' + helloToParrotRequest))
-      .catch(e => { throw new Error(e) });
+    return (window as any).workspace
+      .service({ serviceName: 'ParrotService' })
+      .then((parrot) => parrot.proxy.repeat('Hello' + helloToParrotRequest))
+      .catch((e) => {
+        throw new Error(e);
+      });
   }
 
   public helloToCount(name: string) {
-    return interval(1000)
-      .pipe(
-        map((num: number) => `Hello ${name} times ${num}`)
-      );
+    return interval(1000).pipe(map((num: number) => `Hello ${name} times ${num}`));
   }
 }
