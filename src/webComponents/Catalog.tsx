@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest, from } from 'rxjs';
+import { map, switchMap, startWith } from 'rxjs/operators';
 import { Dropdown } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
@@ -14,16 +14,15 @@ declare global {
 
 class UICatalog extends React.Component {
 
-  static defaultProps = {
-    selected: {},
-    items: [],
-  };
-
   private handleOnChange = ({ label }) => {
     this.props.select({ key: { envKey: label } });
   }
 
   render() {
+    if (!this.props.items) {
+      return <p>Loading...</p>
+    }
+
     const { items, selected } = this.props;
 
     return (
@@ -58,16 +57,25 @@ class Catalog extends HTMLElement {
 }
 
 export default class CatalogWithData extends Catalog {
-  private async setState() {
+  private setState() {
     const workspace = window.workspace;
-    const envSelectorService = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
-    this.props$ = combineLatest(
-      envSelectorService.output$({}).pipe(
-        map((envs) => envs.map((env) => ({ label: env.envKey }))),
-      ),
-      envSelectorService.selected$({}),
-    ).pipe(
-      map((data) => ({ items: data[0], selected: data[1], select: envSelectorService.select }))
-    )
+    this.props$ = from(workspace.service({ serviceName: 'EnvSelectorService' })).pipe(
+      map(serviceData => serviceData.proxy),
+      switchMap((envSelectorService) => {
+        return combineLatest(
+          envSelectorService.output$({}).pipe(
+            map((envs) => envs.map((env) => ({ label: env.envKey }))),
+          ),
+          envSelectorService.selected$({}),
+        ).pipe(
+          map((data) => ({ items: data[0], selected: data[1], select: envSelectorService.select }))
+        )
+      }),
+      startWith({
+        selected: {},
+        items: [],
+        select: () => {}
+      })
+    );
   }
 }
