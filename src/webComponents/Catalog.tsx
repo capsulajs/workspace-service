@@ -2,6 +2,7 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, from, combineLatest } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { Dropdown } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
 
@@ -11,20 +12,26 @@ declare global {
   }
 }
 
-const UICatalog = (props) => {
-  return (
-    <div id="ui-catalog-component">
-      <p>OUTPUT:</p>
-      <div>
-        {Object.keys(props).map(key => (
-          <div key={key} style={{padding: 20}}>
-            <div>ENV[{key}]: {JSON.stringify(props[key], null, 4)}</div>
-          </div>
-        ))}
+class UICatalog extends React.Component {
+  render() {
+    const props = this.props;
+    const items = Object.keys(props).map(label => ({ label }));
+
+    return (
+      <div id="ui-catalog-component">
+        <Dropdown title="Environments" items={items} onChange={console.log}/>
+        <p>OUTPUT:</p>
+        <div>
+          {Object.keys(props).map(key => (
+            <div key={key} style={{padding: 20}}>
+              <div>ENV[{key}]: {JSON.stringify(props[key], null, 4)}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mountPoint = 'react-catalog';
 const template = document.createElement('template');
