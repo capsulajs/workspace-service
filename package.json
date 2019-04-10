@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
-    "@capsulajs/capsulahub-ui": "^0.1.9",
+    "@capsulajs/capsulahub-ui": "^0.2.4",
     "@capsulajs/environment-registry": "^0.0.1",
     "@scalecube/scalecube-microservice": "next",
     "@types/react": "^16.8.12",

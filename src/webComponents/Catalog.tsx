@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Observable, from, combineLatest } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Dropdown } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
@@ -13,52 +13,61 @@ declare global {
 }
 
 class UICatalog extends React.Component {
+
+  static defaultProps = {
+    selected: {},
+    items: [],
+  };
+
+  private handleOnChange = ({ label }) => {
+    this.props.select({ key: { envKey: label } });
+  }
+
   render() {
-    const props = this.props;
-    const items = Object.keys(props).map(label => ({ label }));
+    const { items, selected } = this.props;
 
     return (
       <div id="ui-catalog-component">
-        <Dropdown title="Environments" items={items} onChange={console.log}/>
+        <Dropdown title="Environments" items={items} onChange={this.handleOnChange}/>
         <p>OUTPUT:</p>
-        <div>
-          {Object.keys(props).map(key => (
-            <div key={key} style={{padding: 20}}>
-              <div>ENV[{key}]: {JSON.stringify(props[key], null, 4)}</div>
-            </div>
-          ))}
-        </div>
+        {!selected.envKey && <p>No env has been selected</p>}
+        {selected.envKey && (
+          <div style={{padding: 20}}>
+            <div>ENV[{selected.envKey}]: {JSON.stringify(selected.env || {})}</div>
+          </div>
+        )}
       </div>
     );
   }
 }
 
-const mountPoint = 'react-catalog';
-const template = document.createElement('template');
-template.innerHTML = `<div id="${mountPoint}"></div>`;
+const mountPoint = 'env-selector';
 
 class Catalog extends HTMLElement {
-  public state$?: Observable<any>;
-  private root: any;
+  public props$?: Observable<any>;
 
   constructor() {
     super();
-    this.root = this.attachShadow({ mode: 'open' });
-    this.root.appendChild(template.content.cloneNode(true));
+    this.innerHTML = `<div id=${mountPoint}></div>`;
   }
 
   public connectedCallback() {
-    const Component = this.state$ ? dataComponentHoc(UICatalog, this.state$) : UICatalog;
-    ReactDOM.render(<Component />, this.root.getElementById(mountPoint));
+    const Component = this.props$ ? dataComponentHoc(UICatalog, this.props$) : UICatalog;
+    ReactDOM.render(<Component />, document.getElementById(mountPoint));
   }
 }
 
 export default class CatalogWithData extends Catalog {
   private async setState() {
     const workspace = window.workspace;
-    const service = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
-    this.state$ = service.output$({}).pipe(
-      map((envs) => envs.reduce((acc, curr) => ({ ...acc, [curr.envKey]: curr.env.services }) ,{}))
-    );
+    const envSelectorService = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
+    this.props$ = combineLatest(
+      envSelectorService.output$({}).pipe(
+        map((envs) => envs.map((env) => ({ label: env.envKey }))),
+      ),
+      envSelectorService.selected$({}),
+    ).pipe(
+      map((data) => ({ items: data[0], selected: data[1], select: envSelectorService.select }))
+    )
   }
 }

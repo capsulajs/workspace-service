@@ -1060,10 +1060,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@capsulajs/capsulahub-ui@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.npmjs.org/@capsulajs/capsulahub-ui/-/capsulahub-ui-0.1.9.tgz#314721c780cc1ca1986008cb40cc7050d9806ebe"
-  integrity sha512-qR2HNzE37XVhLMDtigw48tJI6I/g/i44frsMrwPd6DPSSpWMgDiOJvPIifHORaMpGXessMB/e12dauHh12o/DQ==
+"@capsulajs/capsulahub-ui@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@capsulajs/capsulahub-ui/-/capsulahub-ui-0.2.4.tgz#d21b1792785243fa92109fd85c37706132b6cfb3"
+  integrity sha512-cq86znRKfcDYYbINelMXndDE2Ou3ECRUMPvPVBSYroVm4e0zs30p/oGlhjrM0U9fCvGHyCwYErxBOiLZXE54/Q==
   dependencies:
     json-literal "^1.1.0"
     lodash "^4.17.11"
