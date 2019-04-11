@@ -1,6 +1,6 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Observable, combineLatest, from } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map, switchMap, startWith } from 'rxjs/operators';
 import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
@@ -10,9 +10,13 @@ interface MethodCatalogProps {
   methods: any[];
 }
 
-class MethodCatalogUI extends React.Component {
-  state = {
-    selectMethod: null,
+interface MethodCatalogState {
+  selectMethod?: object;
+}
+
+class MethodCatalogUI extends React.Component<MethodCatalogProps, MethodCatalogState> {
+  public state = {
+    selectMethod: undefined,
   };
 
   public render() {
