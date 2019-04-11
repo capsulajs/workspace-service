@@ -1,18 +1,24 @@
 import { Workspace } from '../src/Workspace';
 import { envRegistry } from '../src/mocks/envRegistry';
 import { workspaceConfig } from '../src/mocks/workspaceConfig';
+import { token } from '../src/const';
 
-// TODO Fix this test according to the requirement
-describe.skip('POC', () => {
-  it('...', async (done) => {
+describe('POC Real services', () => {
+  it('Env registry and selector work correctly', async (done) => {
     expect.assertions(4);
 
-    localStorage.setItem(`localhost:1234.environmentRegistry`, JSON.stringify(envRegistry));
+    Object.defineProperty(window, 'localStorage', {
+      value: (() => {
+        return {
+          getItem: () => JSON.stringify(envRegistry),
+        };
+      })(),
+    });
 
-    (window as any).workspace = new Workspace({ token: 'abc', config: workspaceConfig });
-    const workspace = (window as any).workspace;
+    const workspace = new Workspace({ token: 'abc', config: workspaceConfig });
+    window.workspace = workspace;
 
-    await workspace.start().catch((e: any) => new Error(e));
+    await workspace.start({ token }).catch((e: any) => new Error(e));
 
     const envSelectorService = (await workspace.service({ serviceName: 'EnvSelectorService' })).proxy;
     const methodSelectorService = (await workspace.service({ serviceName: 'MethodSelectorService' })).proxy;
@@ -65,10 +71,5 @@ describe.skip('POC', () => {
     await envSelectorService.select({ key: { envKey: 'tag-2' } });
     await envSelectorService.select({ key: { envKey: 'master' } });
     await envSelectorService.select({ key: { envKey: 'develop' } });
-
-    // methodSelectorService.output$({}).subscribe({
-    //   next: (method) => console.log,
-    //   complete: () => done()
-    // });
   });
 });
