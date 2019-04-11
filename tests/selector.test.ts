@@ -1,8 +1,5 @@
 import { Selector } from '../src/services/custom/Selector';
 import { from } from 'rxjs';
-import { errorMessage, validationMessages } from './__mocks__/helpers/messages';
-
-// const obsToPromise = obs => new Promise((complete, error) => obs.subscribe({ complete, error }));
 
 describe('Selector tests', () => {
   const envs = [

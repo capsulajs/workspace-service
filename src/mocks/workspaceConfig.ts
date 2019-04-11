@@ -10,13 +10,10 @@ export const workspaceConfig = {
   services: [
     {
       serviceName: 'ParrotService',
-      displayName: 'Parrot',
-      path: '../services/custom/ParrotService',
+      displayName: 'parrotService',
+      path: '../src/services/custom/ParrotService',
       getInstance: (path: string) => {
         return Promise.resolve(new ParrotService(token));
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -29,13 +26,10 @@ export const workspaceConfig = {
     },
     {
       serviceName: 'GreetingService',
-      displayName: 'Greeting',
-      path: '../services/custom/GreetingService',
+      displayName: 'greetingService',
+      path: '../src/services/custom/GreetingService',
       getInstance: (path: string) => {
         return Promise.resolve(new GreetingService());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -43,6 +37,7 @@ export const workspaceConfig = {
           methods: {
             hello: { asyncModel: 'RequestResponse' },
             helloToParrot: { asyncModel: 'RequestResponse' },
+            helloToCount: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -53,9 +48,6 @@ export const workspaceConfig = {
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
         return Promise.resolve(new Selector());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -75,9 +67,6 @@ export const workspaceConfig = {
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
         return Promise.resolve(new Selector());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -94,12 +83,9 @@ export const workspaceConfig = {
     {
       serviceName: 'EnvRegistryService',
       displayName: 'EnvRegistry',
-      path: '@capsulajs/environment-registry',
+      path: '../src/_custom_node_modules_/environment-registry/lib',
       getInstance: (path: string, instanceToken: string) => {
         return Promise.resolve(new EnvRegistry(instanceToken));
-        // return import(path).then((module: any) => {
-        //   return new module.EnvRegistry(token);
-        // });
       },
       options: {
         definition: {
@@ -112,23 +98,20 @@ export const workspaceConfig = {
       },
     },
   ],
-  components: [
-    // {
-    //   name: 'CatalogComponent',
-    //   displayName: 'Catalog',
-    //   path: '../src/services/custom/CatalogComponent',
-    //   options: {
-    //     import: (path: string) => {
-    //       return import(path).then((module: any) => {
-    //         return module.Catalog;
-    //       })
-    //     },
-    //     render: (Component: any, props: any, domSelector: string) => {},
-    //     definition: {
-    //       name: 'CatalogComponent',
-    //       props: {},
-    //     },
-    //   },
-    // },
-  ],
+  components: {
+    componentsBeforeLoad: [
+      {
+        name: 'web-grid',
+        nodeSelector: '#grid',
+        path: '../../webComponents/Grid.tsx',
+      },
+    ],
+    componentsAfterLoad: [
+      {
+        name: 'web-catalog',
+        nodeSelector: '#grid #catalog',
+        path: '../../webComponents/Catalog.tsx',
+      },
+    ],
+  },
 };

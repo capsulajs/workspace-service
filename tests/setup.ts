@@ -1,9 +1,18 @@
 import 'document-register-element';
+import { Workspace as WorkspaceInterface } from '../src/api/Workspace';
+
+declare global {
+  interface Window {
+    workspace: WorkspaceInterface;
+  }
+}
 
 beforeEach(() => {
-  jest.mock(
-    '/home/dmytrohryshchenko/projects/workspace-service/node_modules/typeface-montserrat/index.css',
-    () => ({})
-  );
-  document.body.innerHTML = '<div id="root"></div>';
+  document.body.innerHTML = `
+    <div id="root">
+      <div id="grid">
+        <div id="catalog"></div>
+      </div>
+    </div>
+  `;
 });
