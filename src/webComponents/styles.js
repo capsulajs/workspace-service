@@ -4,13 +4,13 @@ export default {
     background: '#ccc',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
   },
   output: {
-    width: '50%'
-  }
-}
+    width: '50%',
+  },
+};
