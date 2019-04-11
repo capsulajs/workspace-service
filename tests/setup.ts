@@ -9,10 +9,6 @@ declare global {
 
 beforeEach(() => {
   document.body.innerHTML = `
-    <div id="root">
-      <div id="grid">
-        <div id="catalog"></div>
-      </div>
-    </div>
+    <div id="grid"></div>
   `;
 });

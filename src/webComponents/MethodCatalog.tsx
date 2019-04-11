@@ -11,16 +11,16 @@ interface MethodCatalogProps {
 }
 
 interface MethodCatalogState {
-  selectMethod?: object;
+  selectedMethod?: object;
 }
 
 class MethodCatalogUI extends React.Component<MethodCatalogProps, MethodCatalogState> {
   public state = {
-    selectMethod: undefined,
+    selectedMethod: undefined,
   };
 
   public render() {
-    const { selectMethod } = this.state;
+    const { selectedMethod } = this.state;
     const { methods } = this.props;
 
     if (methods.length === 0) {
@@ -28,11 +28,15 @@ class MethodCatalogUI extends React.Component<MethodCatalogProps, MethodCatalogS
     }
 
     return (
-      <Catalog methods={mapServiceMethods(methods)} selectedMethod={selectMethod} selectMethod={this.handleOnChange} />
+      <Catalog
+        methods={mapServiceMethods(methods)}
+        selectedMethod={selectedMethod}
+        selectMethod={this.handleOnChange}
+      />
     );
   }
 
-  private handleOnChange = (method) => this.setState(method);
+  private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
 }
 
 const mountPoint = 'method-catalog';

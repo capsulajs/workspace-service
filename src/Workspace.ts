@@ -1,32 +1,24 @@
+import { Microservices } from '@scalecube/scalecube-microservice';
+import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Workspace as WorkspaceInterface } from './api/Workspace';
 import { StartRequest } from './api/methods/start';
 import { ServicesRequest, ServicesResponse } from './api/methods/services';
 import { ServiceRequest, ServiceResponse } from './api/methods/service';
 import { RegisterRequest } from './api/methods/register';
 import { RegisterComponentRequest } from './api/methods/registerComponent';
-import { Microservices } from '@scalecube/scalecube-microservice';
 import { Orchestrator } from './services/core/Orchestrator';
-import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
 import Grid from './webComponents/Grid';
 import EnvDropdown from './webComponents/EnvDropdown';
 import MethodCatalog from './webComponents/MethodCatalog';
 import { ComponentsMap } from './api/methods/components';
+import { RegisteredService } from './types';
+import { prepareWebComponent } from './helpers';
 
-interface RegisteredService {
-  serviceName: string;
-  displayName: string;
-  definition: any;
-}
-
-const importFake = (path: string): Promise<any> => {
-  const components = {
-    ['../../webComponents/Grid.tsx']: Grid,
-    ['../../webComponents/EnvDropdown.tsx']: EnvDropdown,
-    ['../../webComponents/MethodCatalog.tsx']: MethodCatalog,
-  };
-
-  return Promise.resolve({ default: components[path] });
+const componentModules = {
+  ['http://cdn.components/Grid.tsx']: Grid,
+  ['http://cdn.components/EnvDropdown.tsx']: EnvDropdown,
+  ['http://cdn.components/MethodCatalog.tsx']: MethodCatalog,
 };
 
 export class Workspace implements WorkspaceInterface {
@@ -75,27 +67,17 @@ export class Workspace implements WorkspaceInterface {
 
             await Promise.all(
               this.config.components.componentsBeforeLoad.map(({ name, nodeSelector, path }) => {
-                return importFake(path)
-                  .then((module: any) => module.default)
-                  .then((WebComponent) => {
-                    customElements.define(name, WebComponent);
-                    const webComponent = new WebComponent();
-                    typeof webComponent.setState === 'function' && webComponent.setState();
-                    return this.registerComponent({ componentName: name, nodeSelector, reference: webComponent });
-                  });
+                return prepareWebComponent({ name, path, componentModules }).then((webComponent) =>
+                  this.registerComponent({ componentName: name, nodeSelector, reference: webComponent })
+                );
               })
             );
 
             await Promise.all(
               this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
-                return importFake(path)
-                  .then((module: any) => module.default)
-                  .then((WebComponent) => {
-                    customElements.define(name, WebComponent);
-                    const webComponent = new WebComponent();
-                    typeof webComponent.setState === 'function' && webComponent.setState();
-                    return this.registerComponent({ componentName: name, nodeSelector, reference: webComponent });
-                  });
+                return prepareWebComponent({ name, path, componentModules }).then((webComponent) =>
+                  this.registerComponent({ componentName: name, nodeSelector, reference: webComponent })
+                );
               })
             );
 

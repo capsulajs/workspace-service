@@ -83,7 +83,7 @@ export const workspaceConfig = {
     {
       serviceName: 'EnvRegistryService',
       displayName: 'EnvRegistry',
-      path: '../src/_custom_node_modules_/environment-registry/lib',
+      path: '@capsulajs/environment-registry',
       getInstance: (path: string, instanceToken: string) => {
         return Promise.resolve(new EnvRegistry(instanceToken));
       },
@@ -103,19 +103,19 @@ export const workspaceConfig = {
       {
         name: 'web-grid',
         nodeSelector: '#grid',
-        path: '../../webComponents/Grid.tsx',
+        path: 'http://cdn.components/Grid.tsx',
       },
     ],
     componentsAfterLoad: [
       {
         name: 'web-env-dropdown',
         nodeSelector: '#grid #env-dropdown',
-        path: '../../webComponents/EnvDropdown.tsx',
+        path: 'http://cdn.components/EnvDropdown.tsx',
       },
       {
         name: 'web-method-catalog',
         nodeSelector: '#grid #method-catalog',
-        path: '../../webComponents/MethodCatalog.tsx',
+        path: 'http://cdn.components/MethodCatalog.tsx',
       },
     ],
   },
