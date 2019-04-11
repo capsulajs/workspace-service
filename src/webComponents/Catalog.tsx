@@ -2,10 +2,12 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, combineLatest, from } from 'rxjs';
 import { map, switchMap, startWith } from 'rxjs/operators';
-import { Dropdown } from '@capsulajs/capsulahub-ui';
+import { Dropdown, Catalog } from '@capsulajs/capsulahub-ui';
+import * as a from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
-import styles from './styles';
+import styles from './styles.js';
+import methods from './methodsMock.js';
 
 declare global {
   interface Window {
@@ -13,13 +15,13 @@ declare global {
   }
 }
 
-interface UICatalogProps {
+interface UIAppProps {
   items: any[];
   selected: any;
   select: (request: { key: { envKey: 'string' } }) => void;
 }
 
-class UICatalog extends React.Component<UICatalogProps> {
+class UIApp extends React.Component<UIAppProps> {
   public render() {
     const { items, selected } = this.props;
 
@@ -35,7 +37,9 @@ class UICatalog extends React.Component<UICatalogProps> {
             </div>
           )}
         </div>
-        <div style={styles.column}>Methods selector</div>
+        <div style={styles.column}>
+          <Catalog selectedMethod={methods[0].children[0]} methods={methods} selectMethod={console.log} />
+        </div>
       </div>
     );
   }
@@ -47,7 +51,7 @@ class UICatalog extends React.Component<UICatalogProps> {
 
 const mountPoint = 'env-selector';
 
-class Catalog extends HTMLElement {
+class App extends HTMLElement {
   public props$?: Observable<any>;
 
   constructor() {
@@ -56,12 +60,12 @@ class Catalog extends HTMLElement {
   }
 
   public connectedCallback() {
-    const Component: any = this.props$ ? dataComponentHoc(UICatalog, this.props$) : UICatalog;
+    const Component: any = this.props$ ? dataComponentHoc(UIApp, this.props$) : UIApp;
     ReactDOM.render(<Component />, document.getElementById(mountPoint));
   }
 }
 
-export default class CatalogWithData extends Catalog {
+export default class AppWithData extends App {
   private setState() {
     const workspace = window.workspace;
     this.props$ = from(workspace.service({ serviceName: 'EnvSelectorService' })).pipe(
