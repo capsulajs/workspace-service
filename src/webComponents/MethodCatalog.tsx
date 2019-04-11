@@ -12,8 +12,8 @@ interface MethodCatalogProps {
 
 class MethodCatalogUI extends React.Component {
   state = {
-    selectMethod: null
-  }
+    selectMethod: null,
+  };
 
   public render() {
     const { selectMethod } = this.state;
@@ -24,11 +24,7 @@ class MethodCatalogUI extends React.Component {
     }
 
     return (
-      <Catalog
-        methods={mapServiceMethods(methods)}
-        selectedMethod={selectMethod}
-        selectMethod={this.handleOnChange}
-      />
+      <Catalog methods={mapServiceMethods(methods)} selectedMethod={selectMethod} selectMethod={this.handleOnChange} />
     );
   }
 
