@@ -1,36 +1,34 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, combineLatest, from } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, startWith } from 'rxjs/operators';
 import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
-import { mapServices } from './helpers/mapServices';
+import { mapServiceMethods } from './helpers/mapServiceMethods';
 
 interface MethodCatalogProps {
-  items: any[];
-  selected: any;
-  select: (request: { key: { envKey: 'string' } }) => void;
+  methods: any[];
 }
 
 class MethodCatalogUI extends React.Component {
-  public render() {
-    const { methods, selectMethod } = this.props;
-    const mappedMethods = mapServices(methods);
+  state = {
+    selectMethod: null,
+  };
 
-    if (!mappedMethods[0].children[0]) {
+  public render() {
+    const { selectMethod } = this.state;
+    const { methods } = this.props;
+
+    if (methods.length === 0) {
       return 'No services ..';
     }
 
     return (
-      <Catalog
-        methods={mappedMethods}
-        selectedMethod={mappedMethods[0].children[0].children[0]}
-        selectMethod={this.handleOnChange}
-      />
+      <Catalog methods={mapServiceMethods(methods)} selectedMethod={selectMethod} selectMethod={this.handleOnChange} />
     );
   }
 
-  private handleOnChange = ({ name }) => console.log('Selected Method: ', name);
+  private handleOnChange = (method) => this.setState(method);
 }
 
 const mountPoint = 'method-catalog';
@@ -54,16 +52,11 @@ export default class CatalogWithData extends MethodCatalog {
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((methodSelectorService) => {
-        return combineLatest(methodSelectorService.output$({}), methodSelectorService.selected$({})).pipe(
-          map((data) => ({ methods: data[0], selectedMethod: data[1], selectMethod: methodSelectorService.select }))
-        );
+        return methodSelectorService.output$({}).pipe(map((methods) => ({ methods })));
       }),
-      tap((response) => console.log('response from MethodSelectorService', response))
-      // startWith({
-      //   selected: {},
-      //   items: [],
-      //   select: () => {},
-      // })
+      startWith({
+        methods: [],
+      })
     );
   }
 }
