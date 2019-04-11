@@ -38,7 +38,7 @@ export class Selector<T extends K, K> implements SelectorInterface<T, K> {
           this.data$.next(item);
           resolve();
         },
-        error: error => reject(new Error(error))
+        error: (error) => reject(new Error(error)),
       });
     });
   }
@@ -49,7 +49,7 @@ export class Selector<T extends K, K> implements SelectorInterface<T, K> {
 
   public select(selectRequest: SelectRequest<K>): Promise<T> {
     if (this.data$.getValue() === []) {
-      return Promise.reject(new Error(errorMessage.noData))
+      return Promise.reject(new Error(errorMessage.noData));
     }
 
     if (!isKeyValid(selectRequest)) {
@@ -57,23 +57,32 @@ export class Selector<T extends K, K> implements SelectorInterface<T, K> {
     }
 
     const requestKeys = Object.keys(selectRequest.key);
-    if (requestKeys.every(requestKey => {
-      return Object.keys(this.selectedSubject$.getValue()).includes(requestKey) &&
-        this.selectedSubject$.getValue()[requestKey] === selectRequest.key[requestKey]
-    })) {
+    if (
+      requestKeys.every((requestKey) => {
+        return (
+          Object.keys(this.selectedSubject$.getValue()).includes(requestKey) &&
+          this.selectedSubject$.getValue()[requestKey] === selectRequest.key[requestKey]
+        );
+      })
+    ) {
       return Promise.reject(new Error(errorMessage.alreadySelected));
     }
 
     return new Promise((resolve, reject) => {
-      this.data$.pipe(
+      this.data$
+        .pipe(
           take(1),
-          map((items) => items.find((item, index) => {
+          map((items) =>
+            items.find((item, index) => {
               const itemKeys = Object.keys(item);
-              return requestKeys.every(requestKey =>
-                itemKeys.some(itemKey =>
-                  itemKey.includes(requestKey) && items[index][itemKey] === selectRequest.key[requestKey]
-                ));
-            })))
+              return requestKeys.every((requestKey) =>
+                itemKeys.some(
+                  (itemKey) => itemKey.includes(requestKey) && items[index][itemKey] === selectRequest.key[requestKey]
+                )
+              );
+            })
+          )
+        )
         .subscribe((item) => {
           if (!item) {
             return reject(new Error(errorMessage.notFound));

@@ -7,35 +7,44 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "parcel src/index.html --target browser",
-    "lint": "tslint -p tsconfig.json",
+    "start": "parcel src/index.html --target browser --no-cache",
+    "build:web": "yarn run parcel build src/webComponents/EnvDropdown.tsx --target esm --no-cache",
+    "lint": "tslint -p tsconfig.json --fix",
+    "prettier": "prettier --write '{src,tests}/**/*.{ts,tsx}'",
     "test": "jest"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "dependencies": {
-    "@capsulajs/capsulahub-ui": "^0.1.3",
+    "@babel/polyfill": "^7.4.3",
+    "@capsulajs/capsulahub-ui": "^0.2.7",
     "@capsulajs/environment-registry": "^0.0.1",
     "@scalecube/scalecube-microservice": "next",
+    "@types/react": "^16.8.12",
+    "@types/react-dom": "^16.8.3",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.6",
-    "babel-polyfill": "^6.26.0",
+    "@types/node": "^11.13.2",
     "codacy-coverage": "^3.4.0",
     "document-register-element": "^1.13.1",
     "husky": "^1.3.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^24.1.0",
-    "parcel-bundler": "^1.12.3",
+    "lodash": "^4.17.11",
+    "parcel-bundler": "^1.9.7",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
     "ts-jest": "^24.0.0",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
-    "typescript": "^3.3.3"
+    "typescript": "^3.4.1"
   }
 }

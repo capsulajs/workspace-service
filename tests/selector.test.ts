@@ -1,8 +1,5 @@
 import { Selector } from '../src/services/custom/Selector';
 import { from } from 'rxjs';
-import { errorMessage, validationMessages } from './__mocks__/helpers/messages';
-
-// const obsToPromise = obs => new Promise((complete, error) => obs.subscribe({ complete, error }));
 
 describe('Selector tests', () => {
   const envs = [
@@ -19,7 +16,7 @@ describe('Selector tests', () => {
               method3: { asyncModel: 'RequestStream' },
               method4: { asyncModel: 'RequestResponse' },
               method5: { asyncModel: 'RequestStream' },
-            }
+            },
           },
           {
             serviceName: 'service2',
@@ -27,10 +24,10 @@ describe('Selector tests', () => {
             methods: {
               method1: { asyncModel: 'RequestResponse' },
               method2: { asyncModel: 'RequestResponse' },
-            }
+            },
           },
-        ]
-      }
+        ],
+      },
     },
     {
       envKey: 'master',
@@ -45,7 +42,7 @@ describe('Selector tests', () => {
               method3: { asyncModel: 'RequestStream' },
               method4: { asyncModel: 'RequestResponse' },
               method5: { asyncModel: 'RequestStream' },
-            }
+            },
           },
           {
             serviceName: 'service2',
@@ -53,10 +50,10 @@ describe('Selector tests', () => {
             methods: {
               method1: { asyncModel: 'RequestResponse' },
               method2: { asyncModel: 'RequestResponse' },
-            }
+            },
           },
-        ]
-      }
+        ],
+      },
     },
   ];
   const envRegistryItem$ = from([envs]);
@@ -67,10 +64,10 @@ describe('Selector tests', () => {
 
     await envSelector.input({ data: envRegistryItem$ });
 
-    envSelector.output$({}).subscribe(((item) => {
+    envSelector.output$({}).subscribe((item) => {
       expect(item).toEqual(envs);
       done();
-    }));
+    });
   });
 
   it('selector select / selected$', async (done) => {
@@ -82,15 +79,17 @@ describe('Selector tests', () => {
     let counter = 0;
     envSelector.selected$({}).subscribe((env) => {
       switch (counter) {
-        case 0: expect(env).toEqual({});
+        case 0:
+          expect(env).toEqual({});
           break;
-        case 1: expect(env).toEqual(envs[1]);
+        case 1:
+          expect(env).toEqual(envs[1]);
           done();
           break;
       }
       counter = counter + 1;
     });
 
-    await envSelector.select({ key: { envKey: 'master' }});
+    await envSelector.select({ key: { envKey: 'master' } });
   });
 });

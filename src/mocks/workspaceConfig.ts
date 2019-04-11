@@ -10,13 +10,10 @@ export const workspaceConfig = {
   services: [
     {
       serviceName: 'ParrotService',
-      displayName: 'Parrot',
-      path: '../services/custom/ParrotService',
+      displayName: 'parrotService',
+      path: '../src/services/custom/ParrotService',
       getInstance: (path: string) => {
         return Promise.resolve(new ParrotService(token));
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -29,21 +26,19 @@ export const workspaceConfig = {
     },
     {
       serviceName: 'GreetingService',
-      displayName: 'Greeting',
-      path: '../services/custom/GreetingService',
+      displayName: 'greetingService',
+      path: '../src/services/custom/GreetingService',
       getInstance: (path: string) => {
         return Promise.resolve(new GreetingService());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
           serviceName: 'GreetingService',
           methods: {
             hello: { asyncModel: 'RequestResponse' },
-            helloToParrot: { asyncModel: 'RequestResponse' }
-          }
+            helloToParrot: { asyncModel: 'RequestResponse' },
+            helloToCount: { asyncModel: 'RequestStream' },
+          },
         },
       },
     },
@@ -53,9 +48,6 @@ export const workspaceConfig = {
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
         return Promise.resolve(new Selector());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -64,7 +56,7 @@ export const workspaceConfig = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -75,9 +67,6 @@ export const workspaceConfig = {
       path: '../src/services/custom/Selector',
       getInstance: (path: string) => {
         return Promise.resolve(new Selector());
-        // return import(path).then((module: any) => {
-        //   return new module.Selector();
-        // });
       },
       options: {
         definition: {
@@ -86,7 +75,7 @@ export const workspaceConfig = {
             input: { asyncModel: 'RequestResponse' },
             output$: { asyncModel: 'RequestStream' },
             select: { asyncModel: 'RequestResponse' },
-            selected$: { asyncModel: 'RequestStream' }
+            selected$: { asyncModel: 'RequestStream' },
           },
         },
       },
@@ -97,9 +86,6 @@ export const workspaceConfig = {
       path: '@capsulajs/environment-registry',
       getInstance: (path: string, instanceToken: string) => {
         return Promise.resolve(new EnvRegistry(instanceToken));
-        // return import(path).then((module: any) => {
-        //   return new module.EnvRegistry(token);
-        // });
       },
       options: {
         definition: {
@@ -108,27 +94,29 @@ export const workspaceConfig = {
             register: { asyncModel: 'RequestResponse' },
             environments$: { asyncModel: 'RequestStream' },
           },
-        }
+        },
       },
     },
   ],
-  components: [
-    // {
-    //   name: 'CatalogComponent',
-    //   displayName: 'Catalog',
-    //   path: '../src/services/custom/CatalogComponent',
-    //   options: {
-    //     import: (path: string) => {
-    //       return import(path).then((module: any) => {
-    //         return module.Catalog;
-    //       })
-    //     },
-    //     render: (Component: any, props: any, domSelector: string) => {},
-    //     definition: {
-    //       name: 'CatalogComponent',
-    //       props: {},
-    //     },
-    //   },
-    // },
-  ]
+  components: {
+    componentsBeforeLoad: [
+      {
+        name: 'web-grid',
+        nodeSelector: '#grid',
+        path: 'http://cdn.components/Grid.tsx',
+      },
+    ],
+    componentsAfterLoad: [
+      {
+        name: 'web-env-dropdown',
+        nodeSelector: '#grid #env-dropdown',
+        path: 'http://cdn.components/EnvDropdown.tsx',
+      },
+      {
+        name: 'web-method-catalog',
+        nodeSelector: '#grid #method-catalog',
+        path: 'http://cdn.components/MethodCatalog.tsx',
+      },
+    ],
+  },
 };
