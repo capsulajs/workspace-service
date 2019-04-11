@@ -10,6 +10,7 @@ import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
 import Grid from './webComponents/Grid';
 import EnvDropdown from './webComponents/EnvDropdown';
+import MethodCatalog from './webComponents/MethodCatalog';
 import { ComponentsMap } from './api/methods/components';
 
 interface RegisteredService {
@@ -22,6 +23,7 @@ const importFake = (path: string): Promise<any> => {
   const components = {
     ['../../webComponents/Grid.tsx']: Grid,
     ['../../webComponents/EnvDropdown.tsx']: EnvDropdown,
+    ['../../webComponents/MethodCatalog.tsx']: MethodCatalog,
   };
 
   return Promise.resolve({ default: components[path] });

@@ -112,6 +112,11 @@ export const workspaceConfig = {
         nodeSelector: '#grid #env-dropdown',
         path: '../../webComponents/EnvDropdown.tsx',
       },
+      {
+        name: 'web-method-catalog',
+        nodeSelector: '#grid #method-catalog',
+        path: '../../webComponents/MethodCatalog.tsx',
+      },
     ],
   },
 };
