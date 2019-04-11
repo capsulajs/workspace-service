@@ -5,6 +5,7 @@ import { map, switchMap, startWith } from 'rxjs/operators';
 import { Dropdown } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { Workspace as WorkspaceInterface } from '../api/Workspace';
+import styles from './styles';
 
 declare global {
   interface Window {
@@ -23,17 +24,18 @@ class UICatalog extends React.Component<UICatalogProps> {
     const { items, selected } = this.props;
 
     return (
-      <div id="ui-catalog-component">
-        <Dropdown title="Environments" items={items} onChange={this.handleOnChange} />
-        <p>OUTPUT:</p>
-        {!selected.envKey && <p>No env has been selected</p>}
-        {selected.envKey && (
-          <div style={{ padding: 20 }}>
-            <div>
+      <div id="ui-catalog-component" style={styles.root}>
+        <div style={styles.column}>
+          <Dropdown title="Environments" items={items} onChange={this.handleOnChange} />
+          <p>OUTPUT:</p>
+          {!selected.envKey && <p>No env has been selected</p>}
+          {selected.envKey && (
+            <div style={styles.output}>
               ENV[{selected.envKey}]: {JSON.stringify(selected.env || {})}
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <div style={styles.column}>Methods selector</div>
       </div>
     );
   }
