@@ -12,7 +12,7 @@ export const mapServices = (methods) => {
     {
       id: 'root',
       name: 'Services',
-      children: Object.keys(serviceGroups).map(mapServiceMethods)
+      children: Object.keys(serviceGroups).map(mapServiceMethods),
     },
   ];
-}
+};
