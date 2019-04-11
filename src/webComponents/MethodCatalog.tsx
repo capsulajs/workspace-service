@@ -2,6 +2,7 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, combineLatest, from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
+import { groupBy } from 'lodash';
 import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 
@@ -13,10 +14,26 @@ interface MethodCatalogProps {
 
 class MethodCatalogUI extends React.Component {
   public render() {
+    const { methods, selectMethod } = this.props;
+    const serviceGroups = groupBy(methods, 'serviceName');
+    const services = Object.keys(serviceGroups);
+    const mappedMethods = [{
+      id: 'root',
+      name: 'Services',
+      children: services.map((service) => ({
+        id: service,
+        name: service,
+        children: serviceGroups[service].map((method) => ({ id: `${service}/${method}`, name: method.methodName }))
+    }];
+
+    if (!mappedMethods[0].children[0]) {
+      return 'No services ..'
+    }
+
     return (
       <div>
-        Test
-        {/*<Catalog title="Environments" items={items} onChange={this.handleOnChange} />*/}
+        <Catalog selectedMethod={mappedMethods[0].children[0].children[0]} methods={mappedMethods} selectMethod={this.handleOnChange} />
+
         {/*<p>OUTPUT:</p>*/}
         {/*{!selected.envKey && <p>No env has been selected</p>}*/}
         {/*{selected.envKey && (*/}
@@ -30,9 +47,7 @@ class MethodCatalogUI extends React.Component {
     );
   }
 
-  // private handleOnChange = ({ label }) => {
-  //   this.props.select({ key: { envKey: label } });
-  // };
+  private handleOnChange = ({ name }) => console.log('Selected Method: ', name);
 }
 
 const mountPoint = 'method-catalog';
