@@ -2,9 +2,9 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, combineLatest, from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { groupBy } from 'lodash';
 import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
+import { mapServices } from './helpers/mapServices';
 
 interface MethodCatalogProps {
   items: any[];
@@ -15,21 +15,7 @@ interface MethodCatalogProps {
 class MethodCatalogUI extends React.Component {
   public render() {
     const { methods, selectMethod } = this.props;
-    const serviceGroups = groupBy(methods, 'serviceName');
-    const services = Object.keys(serviceGroups);
-    const mapService = (service) => ({
-      id: service,
-      name: service,
-      children: serviceGroups[service].map(({ methodName }) => ({ id: methodName, name: methodName })),
-    });
-    const children = services.map(mapService);
-    const mappedMethods = [
-      {
-        children,
-        id: 'root',
-        name: 'Services',
-      },
-    ];
+    const mappedMethods = mapServices(methods);
 
     if (!mappedMethods[0].children[0]) {
       return 'No services ..';
@@ -37,8 +23,8 @@ class MethodCatalogUI extends React.Component {
 
     return (
       <Catalog
-        selectedMethod={mappedMethods[0].children[0].children[0]}
         methods={mappedMethods}
+        selectedMethod={mappedMethods[0].children[0].children[0]}
         selectMethod={this.handleOnChange}
       />
     );
