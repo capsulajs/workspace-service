@@ -17,33 +17,30 @@ class MethodCatalogUI extends React.Component {
     const { methods, selectMethod } = this.props;
     const serviceGroups = groupBy(methods, 'serviceName');
     const services = Object.keys(serviceGroups);
-    const mappedMethods = [{
-      id: 'root',
-      name: 'Services',
-      children: services.map((service) => ({
-        id: service,
-        name: service,
-        children: serviceGroups[service].map((method) => ({ id: `${service}/${method}`, name: method.methodName }))
-    }];
+    const mapService = (service) => ({
+      id: service,
+      name: service,
+      children: serviceGroups[service].map(({ methodName }) => ({ id: methodName, name: methodName })),
+    });
+    const children = services.map(mapService);
+    const mappedMethods = [
+      {
+        children,
+        id: 'root',
+        name: 'Services',
+      },
+    ];
 
     if (!mappedMethods[0].children[0]) {
-      return 'No services ..'
+      return 'No services ..';
     }
 
     return (
-      <div>
-        <Catalog selectedMethod={mappedMethods[0].children[0].children[0]} methods={mappedMethods} selectMethod={this.handleOnChange} />
-
-        {/*<p>OUTPUT:</p>*/}
-        {/*{!selected.envKey && <p>No env has been selected</p>}*/}
-        {/*{selected.envKey && (*/}
-        {/*  <div style={{ padding: 20 }}>*/}
-        {/*    <div>*/}
-        {/*      ENV[{selected.envKey}]: {JSON.stringify(selected.env || {})}*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*)}*/}
-      </div>
+      <Catalog
+        selectedMethod={mappedMethods[0].children[0].children[0]}
+        methods={mappedMethods}
+        selectMethod={this.handleOnChange}
+      />
     );
   }
 
