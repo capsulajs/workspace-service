@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "start": "parcel src/index.html --target browser --no-cache",
-    "build:web": "yarn run parcel build src/webComponents/Catalog.tsx --target esm --no-cache",
+    "build:web": "yarn run parcel build src/webComponents/EnvDropdown.tsx --target esm --no-cache",
     "lint": "tslint -p tsconfig.json --fix",
     "prettier": "prettier --write '{src,tests}/**/*.{ts,tsx}'",
     "test": "jest"

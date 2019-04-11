@@ -108,9 +108,9 @@ export const workspaceConfig = {
     ],
     componentsAfterLoad: [
       {
-        name: 'web-catalog',
-        nodeSelector: '#grid #catalog',
-        path: '../../webComponents/Catalog.tsx',
+        name: 'web-env-dropdown',
+        nodeSelector: '#grid #env-dropdown',
+        path: '../../webComponents/EnvDropdown.tsx',
       },
     ],
   },

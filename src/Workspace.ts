@@ -8,7 +8,8 @@ import { Microservices } from '@scalecube/scalecube-microservice';
 import { Orchestrator } from './services/core/Orchestrator';
 import { Service } from '@scalecube/scalecube-microservice/lib/api';
 import { Layout } from './services/core/Layout';
-import Catalog from './webComponents/Catalog';
+import Grid from './webComponents/Grid';
+import EnvDropdown from './webComponents/EnvDropdown';
 import { ComponentsMap } from './api/methods/components';
 
 interface RegisteredService {
@@ -19,7 +20,8 @@ interface RegisteredService {
 
 const importFake = (path: string): Promise<any> => {
   const components = {
-    ['../../webComponents/Catalog.tsx']: Catalog,
+    ['../../webComponents/Grid.tsx']: Grid,
+    ['../../webComponents/EnvDropdown.tsx']: EnvDropdown,
   };
 
   return Promise.resolve({ default: components[path] });
@@ -70,13 +72,26 @@ export class Workspace implements WorkspaceInterface {
             this.microservice = Microservices.create({ services: s });
 
             await Promise.all(
+              this.config.components.componentsBeforeLoad.map(({ name, nodeSelector, path }) => {
+                return importFake(path)
+                  .then((module: any) => module.default)
+                  .then((WebComponent) => {
+                    customElements.define(name, WebComponent);
+                    const webComponent = new WebComponent();
+                    typeof webComponent.setState === 'function' && webComponent.setState();
+                    return this.registerComponent({ componentName: name, nodeSelector, reference: webComponent });
+                  });
+              })
+            );
+
+            await Promise.all(
               this.config.components.componentsAfterLoad.map(({ name, nodeSelector, path }) => {
                 return importFake(path)
                   .then((module: any) => module.default)
                   .then((WebComponent) => {
                     customElements.define(name, WebComponent);
                     const webComponent = new WebComponent();
-                    webComponent.setState();
+                    typeof webComponent.setState === 'function' && webComponent.setState();
                     return this.registerComponent({ componentName: name, nodeSelector, reference: webComponent });
                   });
               })

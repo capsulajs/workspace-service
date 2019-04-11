@@ -16,14 +16,6 @@ localStorage.setItem(`${token}.environmentRegistry`, JSON.stringify(envRegistry)
 const workspace = new Workspace({ token, config: workspaceConfig });
 window.workspace = workspace;
 
-workspace
-  .start({ token })
-  .then(() => {
-    workspace
-      .services({})
-      .then((data) => console.log('data', data))
-      .catch((error) => console.log('error', error));
-  })
-  .catch((error) => {
-    throw new Error(error);
-  });
+workspace.start({ token }).then(() => {
+  console.log('Workspace has been started');
+});
