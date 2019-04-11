@@ -38,7 +38,7 @@ class UIApp extends React.Component<UIAppProps> {
           )}
         </div>
         <div style={styles.column}>
-          <Catalog selectedMethod={methods[0].children[0]} methods={methods} selectMethod={console.log}/>
+          <Catalog selectedMethod={methods[0].children[0]} methods={methods} selectMethod={console.log} />
         </div>
       </div>
     );
