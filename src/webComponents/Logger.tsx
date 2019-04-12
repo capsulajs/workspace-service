@@ -9,17 +9,11 @@ import { isEqual } from 'lodash';
 
 interface LoggerProps {
   logs: Observable<LoggerEvent>[];
+  width: number;
+  height: number;
 }
 
-class LoggerUI extends React.Component<LoggerProps> {
-  public render() {
-    return <Logger logs={this.props.logs} width={600} height={400} />;
-  }
-
-  private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
-}
-
-const mountPoint = 'logger';
+const mountPoint = 'web-logger';
 
 class Logs extends HTMLElement {
   public props$?: Observable<any>;
@@ -30,7 +24,7 @@ class Logs extends HTMLElement {
   }
 
   public connectedCallback() {
-    const Component: any = this.props$ ? dataComponentHoc(LoggerUI, this.props$) : LoggerUI;
+    const Component: any = this.props$ ? dataComponentHoc(Logger, this.props$) : Logger;
     ReactDOM.render(<Component />, document.getElementById(mountPoint));
   }
 }
@@ -45,6 +39,8 @@ export default class LogsWithData extends Logs {
       switchMap(([envSelectorService, methodSelectorService]) => {
         if (envSelectorService && methodSelectorService) {
           return of({
+            width: 600,
+            height: 400,
             logs: [
               envSelectorService.selected$({}).pipe(
                 distinctUntilChanged(isEqual),
@@ -78,7 +74,11 @@ export default class LogsWithData extends Logs {
           });
         }
 
-        return of({ logs: [] });
+        return of({
+          width: 600,
+          height: 400,
+          logs: [],
+        });
       })
     );
   }

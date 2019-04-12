@@ -20,7 +20,7 @@ class EnvDropdownUI extends React.Component<EnvDropdownUIProps> {
   };
 }
 
-const mountPoint = 'env-selector';
+const mountPoint = 'web-env-selector';
 
 class EnvDropdown extends HTMLElement {
   public props$?: Observable<any>;
