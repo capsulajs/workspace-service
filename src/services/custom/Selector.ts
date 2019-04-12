@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { isKeyValid } from '../../../tests/__mocks__/helpers/validators';
 import { errorMessage, validationMessages } from '../../../tests/__mocks__/helpers/messages';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 interface SelectorInterface<T extends K, K> {
   input(inputRequest: InputRequest<T>): Promise<void>;
@@ -72,10 +72,8 @@ export class Selector<T extends K, K> implements SelectorInterface<T, K> {
       this.data$
         .pipe(
           take(1),
-          tap((items) => console.log('items in select', items)),
           map((items) =>
             items.find((item, index) => {
-              console.log('requestKeys', requestKeys);
               const itemKeys = Object.keys(item);
               return requestKeys.every((requestKey) =>
                 itemKeys.some(

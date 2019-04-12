@@ -2,25 +2,25 @@ export const envRegistry = {
   develop: {
     services: [
       {
-        serviceName: 'service1',
-        url: 'http://accessPoint/dev/service1',
+        serviceName: 'ParrotService',
+        url: 'http://accessPoint/dev/ParrotService',
         methods: {
-          myTestMethod1: {
+          repeat: {
             asyncModel: 'RequestResponse',
           },
         },
       },
       {
-        serviceName: 'service2',
-        url: 'http://accessPoint/dev/service2',
+        serviceName: 'GreetingService',
+        url: 'http://accessPoint/dev/GreetingService',
         methods: {
-          myTestMethod1: {
+          hello: {
             asyncModel: 'RequestResponse',
           },
-          myTestMethod2: {
-            asyncModel: 'RequestStream',
+          helloToParrot: {
+            asyncModel: 'RequestResponse',
           },
-          myTestMethod3: {
+          helloToCount: {
             asyncModel: 'RequestStream',
           },
         },

@@ -31,8 +31,9 @@ export default class CatalogWithData extends MethodCatalog {
           map((methods) => ({
             methods: mapServiceMethods(methods),
             selectMethod: (selectedMethod: any) => {
-              console.log('selectedMethod', selectedMethod);
-              methodSelectorService.select({ key: selectedMethod });
+              methodSelectorService.select({
+                key: { serviceName: selectedMethod.id, methodName: selectedMethod.name },
+              });
             },
           }))
         );

@@ -3,9 +3,9 @@ import { groupBy } from 'lodash';
 export const mapServiceMethods = (methods) => {
   const serviceGroups = groupBy(methods, 'serviceName');
   const mapServiceMethod = (service) => ({
-    id: service,
+    id: 'root',
     name: service,
-    children: serviceGroups[service].map(({ methodName }) => ({ id: methodName, name: methodName })),
+    children: serviceGroups[service].map(({ methodName }) => ({ id: service, name: methodName })),
   });
 
   return [

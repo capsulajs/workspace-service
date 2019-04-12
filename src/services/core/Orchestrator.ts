@@ -41,9 +41,6 @@ export class Orchestrator {
                     methods.push({ serviceName: service.serviceName, methodName: key });
                   });
                 });
-
-                console.log('ORCH envSelector.selected$ methods', methods);
-
                 methodSelector.input({ data: from([methods]) });
               }
             });

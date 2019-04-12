@@ -26,11 +26,17 @@ export default class RequestFormWithData extends RequestForm {
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((methodSelectorService) => {
-        return methodSelectorService.selected$({}).pipe(tap((data) => console.log('selected$', data)));
+        return methodSelectorService.selected$({});
       }),
-      startWith({
-        selectedMethod: {},
-      })
+      tap((data) => console.log('data', data)),
+      map((selectedMethod) => ({
+        width: 300,
+        height: 200,
+        path: `${selectedMethod.serviceName}/${selectedMethod.methodName}`,
+      }))
+      // startWith({
+      //   selectedMethod: {},
+      // })
     );
   }
 }
