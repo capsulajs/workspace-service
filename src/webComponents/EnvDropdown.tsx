@@ -12,7 +12,7 @@ interface EnvDropdownUIProps {
 
 class EnvDropdownUI extends React.Component<EnvDropdownUIProps> {
   public render() {
-    return <Dropdown title="Environments" items={this.props.items} onChange={this.handleOnChange} />;
+    return <Dropdown title="Environments" items={this.props.items} onChange={this.handleOnChange} />
   }
 
   private handleOnChange = ({ label }) => {
@@ -42,12 +42,13 @@ export default class CatalogWithData extends EnvDropdown {
       map((serviceData) => serviceData.proxy),
       switchMap((envSelectorService) => {
         return envSelectorService.output$({}).pipe(
-          map((envs: any[]) => envs.map((env) => ({ label: env.envKey }))),
+          map(
+            (envs: any[]) => envs.map((env) => ({ label: env.envKey }))
+          ),
           map((items) => ({
-            items,
-            select: envSelectorService.select,
+            items, select: envSelectorService.select
           }))
-        );
+        )
       }),
       startWith({
         items: [],

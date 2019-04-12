@@ -54,7 +54,7 @@ export default class LogsWithData extends Logs {
                   correlationId: 'EnvSelectorService',
                   type: 'response',
                   methodName: 'EnvSelectorService/selected',
-                  timestamp: new Date().getTime(),
+                  timestamp: new Date().getTime()
                 }))
               ),
               methodSelectorService.output$({}).pipe(
@@ -65,11 +65,11 @@ export default class LogsWithData extends Logs {
                   correlationId: 'MethodSelectorService',
                   type: 'response',
                   methodName: 'MethodSelectorService/output',
-                  timestamp: new Date().getTime(),
+                  timestamp: new Date().getTime()
                 }))
-              ),
-            ],
-          });
+              )
+            ]
+          })
         }
       }),
       startWith({

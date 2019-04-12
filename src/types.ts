@@ -4,6 +4,7 @@ export interface RegisteredService {
   definition: any;
 }
 
+
 export type EventType = 'request' | 'response';
 export interface LoggerEvent {
   timestamp: number;
