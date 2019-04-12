@@ -53,7 +53,7 @@ class EnvDropdown extends HTMLElement {
 }
 
 export default class CatalogWithData extends EnvDropdown {
-  private setState() {
+  public setProps() {
     this.props$ = from(window.workspace.service({ serviceName: 'EnvSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((envSelectorService) => {

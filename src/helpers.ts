@@ -8,7 +8,7 @@ export const prepareWebComponent = ({ name, path, componentModules }) => {
     .then((WebComponent) => {
       customElements.define(name, WebComponent);
       const webComponent = new WebComponent();
-      typeof webComponent.setState === 'function' && webComponent.setState();
+      typeof webComponent.setProps === 'function' && webComponent.setProps();
       return webComponent;
     });
 };

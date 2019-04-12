@@ -56,7 +56,7 @@ class MethodCatalog extends HTMLElement {
 }
 
 export default class CatalogWithData extends MethodCatalog {
-  private setState() {
+  public setProps() {
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((methodSelectorService) => {
