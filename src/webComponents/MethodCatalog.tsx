@@ -39,7 +39,7 @@ class MethodCatalogUI extends React.Component<MethodCatalogProps, MethodCatalogS
   private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
 }
 
-const mountPoint = 'method-catalog';
+const mountPoint = 'web-method-catalog';
 
 class MethodCatalog extends HTMLElement {
   public props$?: Observable<any>;

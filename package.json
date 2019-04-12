@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
-    "@capsulajs/capsulahub-ui": "^0.2.7",
+    "@capsulajs/capsulahub-ui": "^0.2.9",
     "@capsulajs/environment-registry": "^0.0.1",
     "@scalecube/scalecube-microservice": "next",
     "@types/react": "^16.8.12",
