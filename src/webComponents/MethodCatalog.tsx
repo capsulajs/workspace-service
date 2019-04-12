@@ -6,39 +6,6 @@ import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { mapServiceMethods } from './helpers/mapServiceMethods';
 
-interface MethodCatalogProps {
-  methods: any[];
-}
-
-interface MethodCatalogState {
-  selectedMethod?: object;
-}
-
-class MethodCatalogUI extends React.Component<MethodCatalogProps, MethodCatalogState> {
-  public state = {
-    selectedMethod: undefined,
-  };
-
-  public render() {
-    const { selectedMethod } = this.state;
-    const { methods } = this.props;
-
-    if (methods.length === 0) {
-      return 'No services ..';
-    }
-
-    return (
-      <Catalog
-        methods={mapServiceMethods(methods)}
-        selectedMethod={selectedMethod}
-        selectMethod={this.handleOnChange}
-      />
-    );
-  }
-
-  private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
-}
-
 const mountPoint = 'method-catalog';
 
 class MethodCatalog extends HTMLElement {
@@ -50,7 +17,7 @@ class MethodCatalog extends HTMLElement {
   }
 
   public connectedCallback() {
-    const Component: any = this.props$ ? dataComponentHoc(MethodCatalogUI, this.props$) : MethodCatalogUI;
+    const Component: any = this.props$ ? dataComponentHoc(Catalog, this.props$) : Catalog;
     ReactDOM.render(<Component />, document.getElementById(mountPoint));
   }
 }
@@ -60,10 +27,17 @@ export default class CatalogWithData extends MethodCatalog {
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((methodSelectorService) => {
-        return methodSelectorService.output$({}).pipe(map((methods) => ({ methods })));
+        return methodSelectorService.output$({}).pipe(
+          map((methods) => ({
+            methods: mapServiceMethods(methods),
+            selectMethod: (selectedMethod: any) => methodSelectorService.select({ key: selectedMethod }),
+          }))
+        );
       }),
       startWith({
         methods: [],
+        selectedMethod: {},
+        selectMethod: () => {},
       })
     );
   }

@@ -12,6 +12,7 @@ export const dataComponentHoc = (Component: any, data$: any) => {
       if (!this.state) {
         return null;
       }
+
       return <Component {...this.state} />;
     }
   };

@@ -117,6 +117,11 @@ export const workspaceConfig = {
         nodeSelector: '#grid #method-catalog',
         path: 'http://cdn.components/MethodCatalog.tsx',
       },
+      {
+        name: 'web-request-form',
+        nodeSelector: '#grid #request-form',
+        path: 'http://cdn.components/RequestForm.tsx',
+      },
     ],
   },
 };
