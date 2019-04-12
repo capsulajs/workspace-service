@@ -11,7 +11,7 @@ interface LoggerProps {
 
 class LoggerUI extends React.Component<LoggerProps> {
   public render() {
-    return (<Logger logs={[]} width={300} height={400}/>);
+    return <Logger logs={[]} width={300} height={400} />;
   }
 
   private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
@@ -39,10 +39,12 @@ export default class LogsWithData extends Logs {
       from(window.workspace.service({ serviceName: 'EnvSelectorService' })),
       from(window.workspace.service({ serviceName: 'MethodSelectorService' }))
     ).pipe(
-      map((servicesData) => servicesData.map(serviceData => serviceData.proxy)),
-      switchMap((services) => of({
-        logs: services.map(service => service.output$({}))
-      })),
+      map((servicesData) => servicesData.map((serviceData) => serviceData.proxy)),
+      switchMap((services) =>
+        of({
+          logs: services.map((service) => service.output$({})),
+        })
+      ),
       startWith({
         logs: [],
       })

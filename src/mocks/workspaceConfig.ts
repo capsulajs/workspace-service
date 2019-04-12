@@ -121,7 +121,7 @@ export const workspaceConfig = {
         name: 'web-logger',
         nodeSelector: '#grid #logger',
         path: 'http://cdn.components/Logger.tsx',
-      }
+      },
     ],
   },
 };
