@@ -1,12 +1,12 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Observable, of, from, combineLatest, merge } from 'rxjs';
+import { Observable, of, from, combineLatest } from 'rxjs';
 import { map, merge, tap, switchMap, startWith } from 'rxjs/operators';
 import { Logger } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 
 interface LoggerProps {
-  logs: Observable[];
+  logs: Observable<any>[];
 }
 
 class LoggerUI extends React.Component<LoggerProps> {
