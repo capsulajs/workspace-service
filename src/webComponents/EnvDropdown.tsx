@@ -7,28 +7,12 @@ import { dataComponentHoc } from './helpers/dataComponentHoc';
 
 interface EnvDropdownUIProps {
   items: any[];
-  selected: any;
   select: (request: { key: { envKey: 'string' } }) => void;
 }
 
 class EnvDropdownUI extends React.Component<EnvDropdownUIProps> {
   public render() {
-    const { items, selected } = this.props;
-
-    return (
-      <div>
-        <Dropdown title="Environments" items={items} onChange={this.handleOnChange} />
-        <p>OUTPUT:</p>
-        {!selected.envKey && <p>No env has been selected</p>}
-        {selected.envKey && (
-          <div style={{ padding: 20 }}>
-            <div>
-              ENV[{selected.envKey}]: {JSON.stringify(selected.env || {})}
-            </div>
-          </div>
-        )}
-      </div>
-    );
+    return <Dropdown title="Environments" items={this.props.items} onChange={this.handleOnChange} />;
   }
 
   private handleOnChange = ({ label }) => {
@@ -57,13 +41,15 @@ export default class CatalogWithData extends EnvDropdown {
     this.props$ = from(window.workspace.service({ serviceName: 'EnvSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((envSelectorService) => {
-        return combineLatest(
-          envSelectorService.output$({}).pipe(map((envs: any[]) => envs.map((env) => ({ label: env.envKey })))),
-          envSelectorService.selected$({})
-        ).pipe(map((data) => ({ items: data[0], selected: data[1], select: envSelectorService.select })));
+        return envSelectorService.output$({}).pipe(
+          map((envs: any[]) => envs.map((env) => ({ label: env.envKey }))),
+          map((items) => ({
+            items,
+            select: envSelectorService.select,
+          }))
+        );
       }),
       startWith({
-        selected: {},
         items: [],
         select: () => {},
       })

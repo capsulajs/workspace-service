@@ -1,17 +1,19 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Observable, of, from, combineLatest } from 'rxjs';
-import { map, merge, tap, switchMap, startWith } from 'rxjs/operators';
+import { map, merge, tap, switchMap, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { Logger } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
+import { LoggerEvent } from '../types';
+import { isEqual } from 'lodash';
 
 interface LoggerProps {
-  logs: Observable<any>[];
+  logs: Observable<LoggerEvent>[];
 }
 
 class LoggerUI extends React.Component<LoggerProps> {
   public render() {
-    return <Logger logs={[]} width={300} height={400} />;
+    return <Logger logs={this.props.logs} width={600} height={400} />;
   }
 
   private handleOnChange = (selectedMethod) => this.setState({ selectedMethod });
@@ -40,11 +42,36 @@ export default class LogsWithData extends Logs {
       from(window.workspace.service({ serviceName: 'MethodSelectorService' }))
     ).pipe(
       map((servicesData) => servicesData.map((serviceData) => serviceData.proxy)),
-      switchMap((services) =>
-        of({
-          logs: services.map((service) => service.output$({})),
-        })
-      ),
+      switchMap(([envSelectorService, methodSelectorService]) => {
+        if (envSelectorService && methodSelectorService) {
+          return of({
+            logs: [
+              envSelectorService.selected$({}).pipe(
+                distinctUntilChanged(isEqual),
+                map((response) => ({
+                  request: {},
+                  response,
+                  correlationId: 'EnvSelectorService',
+                  type: 'response',
+                  methodName: 'EnvSelectorService/selected',
+                  timestamp: new Date().getTime(),
+                }))
+              ),
+              methodSelectorService.output$({}).pipe(
+                distinctUntilChanged(isEqual),
+                map((response) => ({
+                  request: {},
+                  response,
+                  correlationId: 'MethodSelectorService',
+                  type: 'response',
+                  methodName: 'MethodSelectorService/output',
+                  timestamp: new Date().getTime(),
+                }))
+              ),
+            ],
+          });
+        }
+      }),
       startWith({
         logs: [],
       })
