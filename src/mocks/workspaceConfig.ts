@@ -118,6 +118,11 @@ export const workspaceConfig = {
         path: 'http://cdn.components/MethodCatalog.tsx',
       },
       {
+        name: 'web-logger',
+        nodeSelector: '#grid #logger',
+        path: 'http://cdn.components/Logger.tsx',
+      },
+      {
         name: 'web-request-form',
         nodeSelector: '#grid #request-form',
         path: 'http://cdn.components/RequestForm.tsx',

@@ -11,6 +11,7 @@ import { Layout } from './services/core/Layout';
 import Grid from './webComponents/Grid';
 import EnvDropdown from './webComponents/EnvDropdown';
 import MethodCatalog from './webComponents/MethodCatalog';
+import Logger from './webComponents/Logger';
 import RequestForm from './webComponents/RequestForm';
 import { ComponentsMap } from './api/methods/components';
 import { RegisteredService } from './types';
@@ -20,6 +21,7 @@ const componentModules = {
   ['http://cdn.components/Grid.tsx']: Grid,
   ['http://cdn.components/EnvDropdown.tsx']: EnvDropdown,
   ['http://cdn.components/MethodCatalog.tsx']: MethodCatalog,
+  ['http://cdn.components/Logger.tsx']: Logger,
   ['http://cdn.components/RequestForm.tsx']: RequestForm,
 };
 

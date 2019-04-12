@@ -6,7 +6,7 @@ import { Catalog } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
 import { mapServiceMethods } from './helpers/mapServiceMethods';
 
-const mountPoint = 'method-catalog';
+const mountPoint = 'web-method-catalog';
 
 class MethodCatalog extends HTMLElement {
   public props$?: Observable<any>;
