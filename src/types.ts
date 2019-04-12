@@ -7,10 +7,10 @@ export interface RegisteredService {
 export type EventType = 'request' | 'response';
 export interface LoggerEvent {
   timestamp: number;
-  correlationId: number;
+  correlationId: string;
   type: LoggerEventType;
   serviceName: string;
   methodName: string;
-  request: object;
-  response: object;
+  request: any;
+  response: any;
 }

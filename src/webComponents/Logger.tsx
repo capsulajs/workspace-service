@@ -48,32 +48,37 @@ export default class LogsWithData extends Logs {
             logs: [
               envSelectorService.selected$({}).pipe(
                 distinctUntilChanged(isEqual),
-                map((response) => ({
-                  request: {},
-                  response,
-                  correlationId: 'EnvSelectorService',
-                  type: 'response',
-                  methodName: 'EnvSelectorService/selected',
-                  timestamp: new Date().getTime(),
-                }))
+                map(
+                  (response): LoggerEvent => ({
+                    request: {},
+                    response,
+                    correlationId: 'EnvSelectorService',
+                    type: 'response',
+                    serviceName: 'EnvSelectorService',
+                    methodName: 'selected$',
+                    timestamp: new Date().getTime(),
+                  })
+                )
               ),
               methodSelectorService.output$({}).pipe(
                 distinctUntilChanged(isEqual),
-                map((response) => ({
-                  request: {},
-                  response,
-                  correlationId: 'MethodSelectorService',
-                  type: 'response',
-                  methodName: 'MethodSelectorService/output',
-                  timestamp: new Date().getTime(),
-                }))
+                map(
+                  (response): LoggerEvent => ({
+                    request: {},
+                    response,
+                    correlationId: 'MethodSelectorService',
+                    type: 'response',
+                    serviceName: 'MethodSelectorService',
+                    methodName: 'output$',
+                    timestamp: new Date().getTime(),
+                  })
+                )
               ),
             ],
           });
         }
-      }),
-      startWith({
-        logs: [],
+
+        return of({ logs: [] });
       })
     );
   }
