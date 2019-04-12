@@ -77,7 +77,7 @@ export default class LogsWithData extends Logs {
         return of({
           width: 600,
           height: 400,
-          logs: [],
+          logs: []
         });
       })
     );
