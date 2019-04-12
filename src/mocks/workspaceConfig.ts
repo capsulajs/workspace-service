@@ -117,6 +117,11 @@ export const workspaceConfig = {
         nodeSelector: '#grid #method-catalog',
         path: 'http://cdn.components/MethodCatalog.tsx',
       },
+      {
+        name: 'web-logger',
+        nodeSelector: '#grid #logger',
+        path: 'http://cdn.components/Logger.tsx',
+      },
     ],
   },
 };
