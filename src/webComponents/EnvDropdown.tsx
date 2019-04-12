@@ -1,24 +1,9 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Observable, combineLatest, from } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map, switchMap, startWith } from 'rxjs/operators';
 import { Dropdown } from '@capsulajs/capsulahub-ui';
 import { dataComponentHoc } from './helpers/dataComponentHoc';
-
-interface EnvDropdownUIProps {
-  items: any[];
-  select: (request: { key: { envKey: 'string' } }) => void;
-}
-
-class EnvDropdownUI extends React.Component<EnvDropdownUIProps> {
-  public render() {
-    return <Dropdown title="Environments" items={this.props.items} onChange={this.handleOnChange} />;
-  }
-
-  private handleOnChange = ({ label }) => {
-    this.props.select({ key: { envKey: label } });
-  };
-}
 
 const mountPoint = 'web-env-selector';
 
@@ -31,7 +16,7 @@ class EnvDropdown extends HTMLElement {
   }
 
   public connectedCallback() {
-    const Component: any = this.props$ ? dataComponentHoc(EnvDropdownUI, this.props$) : EnvDropdownUI;
+    const Component: any = this.props$ ? dataComponentHoc(Dropdown, this.props$) : Dropdown;
     ReactDOM.render(<Component />, document.getElementById(mountPoint));
   }
 }
@@ -44,12 +29,14 @@ export default class CatalogWithData extends EnvDropdown {
         return envSelectorService.output$({}).pipe(
           map((envs: any[]) => envs.map((env) => ({ label: env.envKey }))),
           map((items) => ({
+            title: 'Environments',
             items,
-            select: envSelectorService.select,
+            onChange: ({ label }: { label: string }) => envSelectorService.select({ key: { envKey: label } }),
           }))
         );
       }),
       startWith({
+        title: 'Environments',
         items: [],
         select: () => {},
       })
