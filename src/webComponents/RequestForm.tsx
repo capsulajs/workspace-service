@@ -33,9 +33,7 @@ export default class RequestFormWithData extends RequestForm {
       setArgument: (index: any, data: any) => {
         console.log('setArgument data', data);
       },
-      submit: (data: any) => {
-        console.log('submit data', data);
-      },
+      submit: () => {},
     };
 
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
@@ -47,6 +45,15 @@ export default class RequestFormWithData extends RequestForm {
       map((selectedMethod) => ({
         ...basicProps,
         path: selectedMethod.methodName ? `${selectedMethod.serviceName}/${selectedMethod.methodName}` : 'Not selected',
+        submit: (data: any) => {
+          if (data.language === 'json') {
+            window.workspace
+              .service({ serviceName: selectedMethod.serviceName })
+              .then((service) => service.proxy[selectedMethod.methodName](JSON.parse(data.arguments[0])))
+              .then((response) => console.log('response', response))
+              .catch((error) => console.log('error', error));
+          }
+        },
       })),
       startWith(basicProps)
     );
