@@ -23,6 +23,21 @@ class RequestForm extends HTMLElement {
 
 export default class RequestFormWithData extends RequestForm {
   public setProps() {
+    const basicProps = {
+      width: 700,
+      height: 500,
+      path: 'Not selected',
+      selectLanguage: (data: any) => {
+        console.log('selectLanguage data', data);
+      },
+      setArgument: (index: any, data: any) => {
+        console.log('setArgument data', data);
+      },
+      submit: (data: any) => {
+        console.log('submit data', data);
+      },
+    };
+
     this.props$ = from(window.workspace.service({ serviceName: 'MethodSelectorService' })).pipe(
       map((serviceData) => serviceData.proxy),
       switchMap((methodSelectorService) => {
@@ -30,13 +45,10 @@ export default class RequestFormWithData extends RequestForm {
       }),
       tap((data) => console.log('data', data)),
       map((selectedMethod) => ({
-        width: 300,
-        height: 200,
-        path: `${selectedMethod.serviceName}/${selectedMethod.methodName}`,
-      }))
-      // startWith({
-      //   selectedMethod: {},
-      // })
+        ...basicProps,
+        path: selectedMethod.methodName ? `${selectedMethod.serviceName}/${selectedMethod.methodName}` : 'Not selected',
+      })),
+      startWith(basicProps)
     );
   }
 }
