@@ -1,4 +1,5 @@
-
+Background:
+  Given a valid 'flow' is an object with three valid entries called 'name', 'id' and 'execute'
 
  Scenario: Orchestrator is initiated with configuration with one valid flow - flow is executed
   Given Workspace service including service A and service B
@@ -15,10 +16,10 @@
 Scenario: Orchestrator is initiated with a config with a flow that doesn't match the pattern - an error is returned
   Given Workspace service including service A and service B
   And   Orchestrator including in its configuration a flow that doesn't match the following pattern
-         |property| type   |
-		 |name    | string |
-		 |id      | string |
-		 |execute | promise|
+         |property| type     |
+		 |name    | string   |
+		 |id      | string   |
+		 |execute | function |
   When  the Workspace starts and Orchestrator is initiated
   Then  a relevant error is returned
 
