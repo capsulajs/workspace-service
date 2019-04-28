@@ -11,15 +11,13 @@ Background:
   Given Workspace service including service A and service B
   And   Orchestrator including in its configuration a valid flow between service A and B
   When  Orchestrator is initiated
-  Then  the flow between service A and B is executed
-  And   the Promise is resolved
+  Then  the Promise is resolved
 
  Scenario: Orchestrator is initiated with configuration with two or more valid flows - flows are executed
   Given Workspace service including service A and service B
   And   Orchestrator including in its configuration two or more valid flows between service A and B
   When  Orchestrator is initiated
-  Then  the flows between service A and B are executed
-  And   the Promise is resolved
+  Then  the Promise is resolved
 
 Scenario: Initiating Orchestrator with no configuration returns error
   Given Workspace service including service A and service B
@@ -71,3 +69,9 @@ Scenario: Orchestrator is initiated with a configuration with empty flows
    When  Orchestrator is initiated
    And   the flows between service A and B are executed
    And   a notification about the error in execute function is returned
+
+Scenario: Orchestrator is initiated with a flow containing a non existing service
+  Given Workspace service including service A and service B
+  And   Orchestrator including in its configuration a valid flow between service A and C
+  When  Orchestrator is initiated
+  Then  the Promise is rejected with a nonExistingServiceError
