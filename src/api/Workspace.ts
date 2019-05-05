@@ -1,24 +1,25 @@
 import { StartRequest } from './methods/start';
-import { ServiceRequest, ServiceResponse } from './methods/service';
-import { RegisterRequest } from './methods/register';
+import { ServicesMap, ServicesRequest } from './methods/services';
+import { RegisterServiceRequest } from './methods/registerService';
+import { ComponentsMap, ComponentsRequest } from './methods/components';
+import { ConfigRequest } from './methods/config';
 
-interface Workspace {
-  // Load all the services from url
-  // Load the layout and render components inside
+export interface Workspace {
+  // Loads all the services from path
+  // Loads the layout and renders components inside
   start(startRequest: StartRequest): Promise<void>;
 
-  // Returns proxy of a registered service
-  // Can be used by any service during run time to get a proxy of another service
-  service(serviceRequest: ServiceRequest): Promise<ServiceResponse>;
+  // Returns all the registered services with its proxies included.
+  // Can be rejected, if Workspace has not been started yet
+  services(servicesRequest: ServicesRequest): Promise<ServicesMap>;
 
-  // Register a service or a component in the workspace
+  // Returns all the registered components
+  components(componentsRequest: ComponentsRequest): Promise<ComponentsMap>;
+
+  // Register a service in the workspace
   // Can be used by any service to register itself and become available with Workspace.service method
-  register(registerRequest: RegisterRequest): Promise<void>;
+  registerService(registerServiceRequest: RegisterServiceRequest): Promise<void>;
 
-  /*
-  // For future / To be defined
-  // Allow persistence of services state
-  persist({ serviceName: string }): Promise<>;
-  state({ serviceName: string }): Observable<ServiceState>;
-  */
+  // Get a service config
+  config(configRequest: ConfigRequest): Promise<any>;
 }
