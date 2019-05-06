@@ -1,3 +1,5 @@
+import { ServiceDefinition } from '@scalecube/scalecube-microservice/lib/api';
+
 interface WorkspaceConfig {
   name: string;
   services: ServiceConfig[];
@@ -6,9 +8,9 @@ interface WorkspaceConfig {
 
 interface ServiceConfig {
   serviceName: string;
-  displayName: string;
   path: string;
-  options: { [key: string]: any };
+  definition: ServiceDefinition;
+  config: { [key: string]: any };
 }
 
 interface ComponentConfig {

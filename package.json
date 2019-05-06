@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "@scalecube/scalecube-microservice": "next",
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
