@@ -7,6 +7,7 @@ import { ComponentsMap, ComponentsRequest } from './methods/components';
  * - Allowing services to register themselves (REGISTER)
  * - Letting services and components communicate together (SERVICES/COMPONENTS)
  * - Getting their own configuration (CONFIG)
+ * Workspace need to be instantiated with a configuration service
  */
 export interface Workspace {
   /**
