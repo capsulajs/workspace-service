@@ -61,6 +61,7 @@ Scenario: Call services method returns a map of promises to each service loaded 
     Given WorkspaceFactory instance with createWorkspace and services methods 
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B include a bootstrap that calls registerService
+    And   the bootstrap includes CAPSULAHUB_WORKSPACE and CAPSULAHUB_CONFIGURATION variable
     When  I run createWorkspace method with token 123 and Workspace is created
     And   I call services method
     Then  I expect to receive a map of promises to service A and B having the following <property>s
@@ -68,6 +69,7 @@ Scenario: Call services method returns a map of promises to each service loaded 
           |serviceName|
           |displayName|
           |proxy      |
+    And   each of the promises is resolved with corresponding service 
 
 Scenario: Call components method returns a map of promises to each component loaded in Workspace
     Given WorkspaceFactory instance with createWorkspace and components methods
