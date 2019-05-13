@@ -1,7 +1,7 @@
 import { CreateWorkspaceRequest } from './methods/createWorkspace';
-import { Workspace } from './Workspace';
+import { WorkspaceService } from './WorkspaceService';
 
-export interface WorkspaceFactory {
+export interface Workspace {
   /**
    * Creating a workspace and loading all services and components included in its configuration.
    * CAPSULAHUB_WORKSPACE and CAPSULAHUB_CONFIGURATION variables are available for loaded services and components,
@@ -13,5 +13,5 @@ export interface WorkspaceFactory {
    * - An error with registering a component occurred
    * @param createWorkspaceRequest
    */
-  createWorkspace(createWorkspaceRequest: CreateWorkspaceRequest): Promise<Workspace>;
+  createWorkspace(createWorkspaceRequest: CreateWorkspaceRequest): Promise<WorkspaceService>;
 }

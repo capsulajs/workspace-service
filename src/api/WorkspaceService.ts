@@ -8,7 +8,7 @@ import { ComponentsMap, ComponentsRequest } from './methods/components';
  * - Letting services and components communicate together (SERVICES/COMPONENTS)
  * - Getting their own configuration (CONFIG)
  */
-export interface Workspace {
+export interface WorkspaceService {
   /**
    * Getting a map of promises to each service that has been loaded in the workspace
    * Reject in case :
