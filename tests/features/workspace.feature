@@ -14,8 +14,7 @@ Scenario: Call createWorkspace with a token with invalid format is rejected with
    Given WorkspaceFactory instance with createWorkspace method
    When  I call createWorkspace with invalid <token> values
          |token     |
-         |'test'    |
-         |' '      |
+         |' '       |
          |{}        |
          |{ test: 'test' }|
          |[]        |
