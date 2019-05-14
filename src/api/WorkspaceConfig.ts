@@ -10,7 +10,7 @@ interface Service {
 interface Component {
   componentName: string;
   path: string;
-  config: any;
+  config: { [key: string]: any };
 }
 
 interface WorkspaceConfig {
