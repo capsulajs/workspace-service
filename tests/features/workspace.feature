@@ -58,7 +58,7 @@ Scenario: An error with registering a component occurs after calling createWorks
 
 
 Scenario: Call services method returns a map of promises to each service loaded in Workspace
-    Given WorkspaceFactory instance with createWorkspace and services methods 
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B include a bootstrap that calls registerService
     And   the bootstrap includes CAPSULAHUB_WORKSPACE and CAPSULAHUB_CONFIGURATION variable
@@ -72,7 +72,7 @@ Scenario: Call services method returns a map of promises to each service loaded 
     And   each of the promises is resolved with corresponding service 
 
 Scenario: Call components method returns a map of promises to each component loaded in Workspace
-    Given WorkspaceFactory instance with createWorkspace and components methods
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     When  I run createWorkspace method with token 123 and Workspace is created
     And   I call workspace components method
@@ -83,7 +83,7 @@ Scenario: Call components method returns a map of promises to each component loa
           |reference    |
 
 Scenario: Call registerService method registers the provided service in the Workspace
-    Given WorkspaceFactory instance with createWorkspace and registerService methods
+    Given WorkspaceFactory instance with createWorkspace method
     And  Configuration for token 123 that includes service A and B and components 1 and 2
     And  Service A and service B include a bootstrap that call registerService
     When I run createWorkspace method with token 123 and Workspace is created
@@ -96,7 +96,7 @@ Scenario: Call registerService method registers the provided service in the Work
     Then Service A is registered in the Workspace
 
 Scenario: Call registerService method with a service already registered is rejected with error
-    Given WorkspaceFactory instance with createWorkspace and registerService methods 
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B include a bootstrap that calls registerService
     And   I run createWorkspace with token 123 and Workspace is created
@@ -105,7 +105,7 @@ Scenario: Call registerService method with a service already registered is rejec
     Then  I expect to receive an error
 
 Scenario: Call registerService method with an invalid serviceName is rejected with error
-    Given WorkspaceFactory instance with createWorkspace and registerService methods
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B includes a bootstrap that call registerService
     When  I run createWorkspace with token 123 and Workspace is created
@@ -125,7 +125,7 @@ Scenario: Call registerService method with an invalid serviceName is rejected wi
     Then  I expect to receive an error
 
 Scenario: Call registerService method with an invalid displayName is rejected with error
-    Given WorkspaceFactory instance with createWorkspace and registerService methods
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B includes a bootstrap that call registerService
     When  I run createWorkspace with token 123 and Workspace is created
@@ -145,7 +145,7 @@ Scenario: Call registerService method with an invalid displayName is rejected wi
     Then I expect to receive an error
 
 Scenario: Call registerService method with a service that doesnt's exist in configuration is rejected with error
-    Given WorkspaceFactory instance with createWorkspace and registerService methods
+    Given WorkspaceFactory instance with createWorkspace method
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B include a bootstrap that calls registerService
     When  I run createWorkspace with token 123 and Workspace is created
