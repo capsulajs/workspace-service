@@ -68,7 +68,7 @@ Scenario: Orchestrator is initiated with a configuration with empty flows
    And   One of the flows has an execute function which will return error when executed
    When  Orchestrator is initiated
    And   the flows between service A and B are executed
-   And   a notification about the error in execute function is returned
+   Then   a notification about the error in execute function is returned
 
 Scenario: Orchestrator is initiated with a flow containing a non existing service
   Given Workspace service including service A and service B
