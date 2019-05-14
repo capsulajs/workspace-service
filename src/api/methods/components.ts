@@ -2,7 +2,7 @@ export interface ComponentsRequest {}
 
 export interface Component {
   componentName: string;
-  nodeSelector: string;
+  nodeId: string;
   reference: any;
 }
 
