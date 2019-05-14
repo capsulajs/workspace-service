@@ -740,6 +740,21 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@capsulajs/capsulajs-configuration-service@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@capsulajs/capsulajs-configuration-service/-/capsulajs-configuration-service-0.1.6.tgz#77dbee3ca949bce406e909860628b29bb02eccbd"
+  integrity sha512-e6TuD3P/J/iQ5L/cajEm2cvmtQqu0HblNdxTW8sJJ/pQMNbRCdIza581MuepURcr/dm6MZoB1QugToYQ7Y2cSQ==
+  dependencies:
+    "@capsulajs/capsulajs-transport-providers" "^0.1.1"
+
+"@capsulajs/capsulajs-transport-providers@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@capsulajs/capsulajs-transport-providers/-/capsulajs-transport-providers-0.1.1.tgz#c4f08cda57af8a1e1eef36b9ec13eb68434181fb"
+  integrity sha512-ik0DfBMngNailwoUHIBJtuHdG9AKN0X+/LdR/cbLcP3Oc3KHdiH+bGmwQWqUffApbT1tFWC5u8OKtDpK3lGZrA==
+  dependencies:
+    axios "^0.18.0"
+    typescript "^3.1.3"
+
 "@iarna/toml@^2.2.0":
   version "2.2.3"
   resolved "https://registry.npmjs.org/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
@@ -1058,6 +1073,14 @@ aws-sign2@~0.7.0:
 aws4@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
+
+axios@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.0.tgz#32d53e4851efdc0a11993b6cd000789d70c05102"
+  integrity sha1-MtU+SFHv3AoRmTts0AB4nXDAUQI=
+  dependencies:
+    follow-redirects "^1.3.0"
+    is-buffer "^1.1.5"
 
 babel-code-frame@^6.22.0:
   version "6.26.0"
@@ -1975,6 +1998,13 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
+debug@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
+  integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
+  dependencies:
+    ms "^2.1.1"
+
 debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
@@ -2487,6 +2517,13 @@ find-up@^3.0.0:
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-3.0.0.tgz#49169f1d7993430646da61ecc5ae355c21c97b73"
   dependencies:
     locate-path "^3.0.0"
+
+follow-redirects@^1.3.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.7.0.tgz#489ebc198dc0e7f64167bd23b03c4c19b5784c76"
+  integrity sha512-m/pZQy4Gj287eNy94nivy5wchN3Kp+Q5WgUPNy5lJSZ3sgkVKSYV/ZChMAQVIgx1SqfZ2zBZtPA2YlXIWxxJOQ==
+  dependencies:
+    debug "^3.2.6"
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -6153,6 +6190,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript@^3.1.3:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
+  integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
 
 typescript@^3.3.3:
   version "3.3.3"
