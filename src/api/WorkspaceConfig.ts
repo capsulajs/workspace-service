@@ -1,11 +1,11 @@
 interface WorkspaceConfig {
   name: string;
-  services: ServiceConfig[]
+  services: ServiceConfig[];
 }
 
 interface ServiceConfig {
-  name: string;
+  serviceName: string;
   displayName: string;
-  url: string;
-  options: Array<{ [key: string]: any }>
+  path: string;
+  options: { [key: string]: any };
 }
