@@ -88,7 +88,7 @@ Scenario: Call registerService method registers the provided service in the Work
     And  Service A and service B include a bootstrap that call registerService
     When I run createWorkspace method with token 123 and Workspace is created
     And  I call registerService method with service A and with a valid request 
-	And  The request has the following <property> and <type>
+    And  The request has the following <property> and <type>
          |<property> | <type>|
          |serviceName| string|
          |displayName| string|
@@ -100,8 +100,7 @@ Scenario: Call registerService method with a service already registered is rejec
     And   Configuration for token 123 that includes service A and B and components 1 and 2
     And   Service A and service B include a bootstrap that calls registerService
     And   I run createWorkspace with token 123 and Workspace is created
-    And   I call registerService method with service A and service is registered
-	When  I call registerService method again with service A
+    When  I call registerService method with service A that was registered
     Then  I expect to receive an error
 
 Scenario: Call registerService method with an invalid serviceName is rejected with error
